@@ -7,11 +7,13 @@
 
 #include <limits>
 
+#include "action.hh"
+
 class Node
 {
 public:  
   /** Constructor */
-  Node();
+  Node(HOO *h);
 
   /** Destructor */
   ~Node();
@@ -19,7 +21,22 @@ public:
   /** Leaf status */
   bool inS() { return Sflag; }
 
+  /** Leaf status */
+  bool isLeaf() { return ((left==NULL) && (right==NULL)); }
+
+  /** Split this leaf */
+  void split();
+
+  /** Rebuild the B-values of this node's subtree */
+  double rebuildSubTree();
+
+  /** Return the currently best action */
+  void bestAction(Action &a);
+
 private:
+  /** Parent stucture */
+  HOO *hoo;
+
   /** Children */
   Node *left;
   Node *right;
@@ -28,20 +45,20 @@ private:
   double sum;
   int nsamples;
   double Bval;
-
   int depth;
 
-  bool Sflag;
+  /** Tree data */
+  int splitDim;
+  double splitValue;
+
+  bool Sflag; // Do I need this
 
   /** Split ranges */
   std::vector<double> minRange;
   std::vector<double> maxRange;
 
-  /** Traverse tree */
-  friend Action bestAction(Node *node);
-
-  /** Rebuild tree */
-  friend double rebuildTree(HOO *hoo, Node *node);
+  /** Sample an action from the node */
+  Action sampleAction();
 };
 
 

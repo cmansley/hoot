@@ -6,33 +6,36 @@ using namespace std;
 class Shape
 {
 public:
-  Shape() {}
+  Shape() : x(1), y(1) { one = new Point(this); }
   ~Shape() {}
 
-  void print() { one.x = 2; std::cout << one.y << one.x << std::endl; }
+  void print() { one->print(); }
+
+private:
+  int x;
+  int y;
+
 
 private:
 
   class Point
   {
   public:
-    Point() : x(1), y(1) {}
-    //  private:
-    int x;
-    int y;
+    Point(Shape *sh) : s(sh)  {}
+    void print() { std::cout << s->x << s->y << std::endl; }
+  private:
+    Shape *s;
   };
 
-  Point one;
+  Point *one;
 };
 
 int main()
 {
 
   Shape s;
-  
+
   s.print();
 
-  Shape::Point x;
-  
   return 0;
 }

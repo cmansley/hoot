@@ -58,6 +58,12 @@ public:
   /** Get maximum range for state features */
   virtual std::vector<double> getMinimumStateRange( ) = 0;
 
+  /** Get number of state dimensions */
+  virtual int getStateDimension( ) = 0;
+
+  /** Get number of action dimensions */
+  virtual int getActionDimension( ) = 0;
+
   /** Get maximum reward */
   virtual double getRmax( ) = 0;
 
