@@ -3,6 +3,7 @@
  */
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 #include <limits>
 
 #include "hoo.hh"
@@ -11,9 +12,9 @@
 /*
  *
  */
-HOO::HOO()
+HOO::HOO(Domain *d) : domain(d)
 {
-  tree = new Node();
+  tree = new Node(domain->);
 }
 
 HOO::~HOO()
@@ -37,7 +38,9 @@ void HOO::insertAction(Action a, double q)
  */
 Action HOO::bestAction()
 {
-  Action a = bestAction(tree);
+  Action a;
+
+  bestAction(tree, a);
 
   return a;
 }
@@ -50,21 +53,18 @@ Action HOO::bestAction()
 /*
  *
  */
-Action bestAction(Node *node)
+void bestAction(Node *node, Action &a)
 { 
   /* Terminate and sample from best node */
   if(node->inS()) {
-    return node->sampleAction();
+    a = node->sampleAction();
   }
 
   /* Follow B-values down tree */
-  Action a;
   if(node->left->Bval < node->right->Bval)
-    a = bestAction(node->right);
+    bestAction(node->right, a);
   else 
-    a = bestAction(node->left);
-
-  return a;
+    bestAction(node->left, a);
 }
 
 /*

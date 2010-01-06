@@ -192,8 +192,8 @@ std::vector<int> UCT::discretizeState(State s)
   int numofgrids = 20;
 
   /* Get range of attributes */
-  std::vector<double> maxRange = domain->getMaximumRange();
-  std::vector<double> minRange = domain->getMinimumRange();
+  std::vector<double> maxRange = domain->getMaximumStateRange();
+  std::vector<double> minRange = domain->getMinimumStateRange();
  
   int temp;
   for(unsigned int i=0; i<s.size(); i++) {

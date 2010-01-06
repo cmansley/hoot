@@ -34,11 +34,17 @@ public:
   /** Get discount factor for domain */
   double getDiscountFactor( ) { return gamma; }
 
-  /** Get maximum range for state features */
-  std::vector<double> getMaximumRange( ) { return maxRange; }
+  /** Get maximum range for action features */
+  std::vector<double> getMaximumActionRange( ) { return maxActionRange; }
+
+  /** Get minimum range for action features */
+  std::vector<double> getMinimumActionRange( ) { return minActionRange; }
 
   /** Get maximum range for state features */
-  std::vector<double> getMinimumRange( ) { return minRange; }
+  std::vector<double> getMaximumStateRange( ) { return maxStateRange; }
+
+  /** Get maximum range for state features */
+  std::vector<double> getMinimumStateRange( ) { return minStateRange; }
 
   /** Get maximum reward */
   double getRmax( ) { return rmax; }
@@ -51,8 +57,10 @@ private:
   State initialState;
 
   /** Domain Parameters */
-  std::vector<double> maxRange;
-  std::vector<double> minRange;
+  std::vector<double> maxStateRange;
+  std::vector<double> minStateRange;
+  std::vector<double> maxActionRange;
+  std::vector<double> minActionRange;
   static const int stateDimension = 2;
   static const int actionDimension = 1;
   //static const double rmin = -1000;

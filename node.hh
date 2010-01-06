@@ -34,7 +34,8 @@ private:
   bool Sflag;
 
   /** Split ranges */
-  
+  std::vector<double> minRange;
+  std::vector<double> maxRange;
 
   /** Traverse tree */
   friend Action bestAction(Node *node);

@@ -46,11 +46,17 @@ public:
   /** Get discount factor for domain */
   virtual double getDiscountFactor( ) = 0;
 
-  /** Get maximum range for state features */
-  virtual std::vector<double> getMaximumRange( ) = 0;
+  /** Get maximum range for action features */
+  virtual std::vector<double> getMaximumActionRange( ) = 0;
+
+  /** Get minimum range for action features */
+  virtual std::vector<double> getMinimumActionRange( ) = 0;
 
   /** Get maximum range for state features */
-  virtual std::vector<double> getMinimumRange( ) = 0;
+  virtual std::vector<double> getMaximumStateRange( ) = 0;
+
+  /** Get maximum range for state features */
+  virtual std::vector<double> getMinimumStateRange( ) = 0;
 
   /** Get maximum reward */
   virtual double getRmax( ) = 0;

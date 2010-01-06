@@ -11,7 +11,7 @@ class HOO
 {
 public:
   /** Constructor */
-  HOO();
+  HOO(Domain *d);
 
   /** Destructor */
   ~HOO();
@@ -23,6 +23,9 @@ public:
   Action bestAction();
 
 private:
+  /** Domain */
+  Domain *domain;
+  
   /** HOO Tree */
   Node *tree;
   

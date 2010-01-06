@@ -22,13 +22,13 @@ IP::IP(double gamma)
   std::fill(initialState.begin(), initialState.end(), 0.0);
 
   /* Create max and min range */
-  maxRange.resize(stateDimension);
-  minRange.resize(stateDimension);
+  maxStateRange.resize(stateDimension);
+  minStateRange.resize(stateDimension);
   
-  maxRange[0] = M_PI;
-  minRange[0] = -M_PI;
-  maxRange[1] = 2;
-  minRange[1] = -2;
+  maxStateRange[0] = M_PI;
+  minStateRange[0] = -M_PI;
+  maxStateRange[1] = 2;
+  minStateRange[1] = -2;
 
   /* Initialize gamma */
   this->gamma = gamma;

@@ -3,7 +3,6 @@
 #include "ip.hh"
 #include "ss.hh"
 #include "uct.hh"
-#include "corput.hh"
 #include "lander.hh"
 
 using namespace std;
