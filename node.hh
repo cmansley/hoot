@@ -5,9 +5,9 @@
 #ifndef NODE_HH
 #define NODE_HH
 
-#include <limits>
-
 #include "action.hh"
+
+class HOO;
 
 class Node
 {
@@ -16,13 +16,16 @@ public:
   Node(HOO *h);
 
   /** Destructor */
-  ~Node();
+  ~Node() {}
 
   /** Leaf status */
   bool inS() { return Sflag; }
 
   /** Leaf status */
   bool isLeaf() { return ((left==NULL) && (right==NULL)); }
+
+  /** Initialize node range value */
+  void rangeInit(std::vector<double> min, std::vector<double> max) { minRange = min; maxRange = max; }
 
   /** Split this leaf */
   void split();
@@ -32,6 +35,9 @@ public:
 
   /** Return the currently best action */
   void bestAction(Action &a);
+
+  /** Recursively insert a value at action a */
+  void insertValue(Action a, double q);
 
 private:
   /** Parent stucture */

@@ -9,14 +9,16 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 
+#include "domain.hh"
 #include "action.hh"
-#include "node.hh"
+
+class Node;
 
 class HOO
 {
 public:
   /** Constructor */
-  HOO();
+  HOO(Domain *d);
 
   /** Destructor */
   ~HOO();
@@ -28,6 +30,9 @@ public:
   Action queryAction();
 
 private:
+  /** Current HOO domain */
+  Domain *domain;
+
   /** For randomness */
   gsl_rng *rng;
 
@@ -39,6 +44,10 @@ private:
 
   /** Number of action dimensions */
   int numDim;
+
+  /** HOO parameters */
+  double v1;
+  double rho;
 
   /** Allow Node to access HOO */
   friend class Node;

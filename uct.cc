@@ -110,7 +110,7 @@ void UCT::updateValue(int depth, SARS *sars, double qvalue)
   std::vector<int> sad = sd;
   sd.push_back(depth);
   sad.push_back(depth);
-  sad.push_back(sars->a[0]);
+  sad.push_back((int)sars->a[0]);
 
   /* Update counts */
   Nsd[sd] += 1 ;

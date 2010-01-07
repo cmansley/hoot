@@ -6,8 +6,8 @@
 #define ACTION_HH
 
 /* Definition dependencies */
-#include <string>
+#include <vector>
 
-typedef std::vector<int> Action;
+typedef std::vector<double> Action;
 
 #endif // ACTION_HH

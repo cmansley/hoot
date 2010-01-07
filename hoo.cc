@@ -6,18 +6,26 @@
 #include <limits>
 
 #include "hoo.hh"
-
+#include "node.hh"
 
 /*
  *
  */
-HOO::HOO()
+HOO::HOO(Domain *d) : domain(d)
 {
   /* Initialize random elements */
   rng = gsl_rng_alloc(gsl_rng_taus);
 
+  /* Number of action dimensions */
+  numDim = domain->getActionDimension();
+
   /* Initialize root of tree */
-  tree = new Node();
+  tree = new Node(this);
+  tree->rangeInit(domain->getMinimumActionRange(), domain->getMaximumActionRange());
+
+  /* Initialize parameters using advice from paper */
+  v1 = sqrt(numDim)/2;
+  rho = 0.5;
 }
 
 HOO::~HOO()

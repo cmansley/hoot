@@ -4,12 +4,12 @@
 #include "ss.hh"
 #include "uct.hh"
 #include "lander.hh"
+#include "hoo.hh"
 
 using namespace std;
 
 int main()
 {
-
   /* Create domain */
   //CCL *domain = new CCL(0.9);
   IP *domain = new IP(0.9);
@@ -19,6 +19,7 @@ int main()
   UCT planner(domain, 0.1);
   //SS planner(domain, 0.1, 1, 5);
   //Corput planner(domain, 0.1);
+  HOO *h = new HOO(domain);
 
   planner.initialize();
 

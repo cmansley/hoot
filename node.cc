@@ -3,18 +3,20 @@
  */
 #include <iostream>
 #include <cmath>
+#include <limits>
 #include <algorithm>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 
 #include "node.hh"
+#include "hoo.hh"
 
 /*
  *
  */
-Node::Node(HOO *h) : hoo(h), left(NULL), right(NULL), nsamples(0), sum(0), depth(0), Sflag(true) 
+Node::Node(HOO *h) : hoo(h), left(NULL), right(NULL), sum(0), nsamples(0), depth(0), Sflag(true) 
 { 
-  Bval = std::numerical_limits<double>::infinity(); 
+  Bval = std::numeric_limits<double>::infinity(); 
 }
 
 /*
@@ -41,8 +43,8 @@ void Node::split()
   if(!isLeaf()) { 
 
     /* Generate children */
-    left = new Node();
-    right = new Node();
+    left = new Node(hoo);
+    right = new Node(hoo);
     
     /* Pick splitting dimension */
     splitDim = depth % hoo->numDim;
@@ -78,7 +80,7 @@ double Node::rebuildSubTree()
   /* Compute this node's B-value */
   double b1 = left->rebuildSubTree();
   double b2 = right->rebuildSubTree();
-  Bval = min(U, max(b1, b2));
+  Bval = std::min(U, std::max(b1, b2));
 
   return Bval;
 }
@@ -94,7 +96,7 @@ void Node::bestAction(Action &a)
   }
 
   /* Follow B-values down tree */
-  if(node->left->Bval < node->right->Bval)
+  if(left->Bval < right->Bval)
     right->bestAction(a);
   else 
     left->bestAction(a);
