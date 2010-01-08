@@ -12,7 +12,7 @@
 
 #include "mcplanner.hh"
 #include "domain.hh"
-#inlcude "hoo.hh"
+#include "hoo.hh"
 
 class HOOT : public MCPlanner
 {
@@ -43,6 +43,9 @@ private:
   /** Algorithm Aux Functions */
   void updateValue(int depth, SARS *sars, double qvalue);
   Action selectAction(State s, int depth, bool greedy);
+
+  /** Reset */
+  void reset();
 
   /** Domain Dependent but Algorithm Defined */
   std::vector<int> discretizeState(State s);

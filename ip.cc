@@ -21,7 +21,7 @@ IP::IP(double gamma)
   initialState.resize(stateDimension);
   std::fill(initialState.begin(), initialState.end(), 0.0);
 
-  /* Create max and min range */
+  /* Create max and min action range */
   maxStateRange.resize(stateDimension);
   minStateRange.resize(stateDimension);
   
@@ -29,6 +29,12 @@ IP::IP(double gamma)
   minStateRange[0] = -M_PI;
   maxStateRange[1] = 2;
   minStateRange[1] = -2;
+
+  maxActionRange.resize(actionDimension);
+  minActionRange.resize(actionDimension);
+  
+  maxActionRange[0] = 50;
+  minActionRange[1] = -50;
 
   /* Initialize gamma */
   this->gamma = gamma;
@@ -47,8 +53,8 @@ SARS *IP::step(State s, Action a)
   sars->s = s;
   sars->a = a;
 
-  /* Works only for discrete actions */
-  double u = (100.0) * a[0] / (numActions- 1) - 50;
+  /* Grab action */
+  double u = a[0];
 
   /* 
    * Run the dynamics simulator using the state and action passed

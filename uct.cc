@@ -168,15 +168,17 @@ Action UCT::selectAction(State s, int depth, bool greedy)
   }
 
   /* Create max action or random if there are more than one */
-  Action a(1);
+  int discreteAction;
   if(vmaxActions.empty()) {
     /* Grab max action */
     std::vector<double>::const_iterator largest = max_element(qtemp.begin(), qtemp.end());
-    a[0] = largest - qtemp.begin();
+    discreteAction = largest - qtemp.begin();
   } else {
     random_shuffle(vmaxActions.begin(), vmaxActions.end());
-    a[0] = vmaxActions[0];
+    discreteAction = vmaxActions[0];
   }
+
+  Action a = continuousAction(discreteAction);
   
   return a;
 }
@@ -202,4 +204,35 @@ std::vector<int> UCT::discretizeState(State s)
   }
 
   return ds;
+}
+
+/*
+ *
+ */
+Action UCT::continuousAction(int a)
+{
+  Action action;
+  
+  /* Must bubble this parameter up to the top */
+  int numofgrids = 20;
+
+  /* Get range of attributes */
+  std::vector<double> maxRange = domain->getMaximumActionRange();
+  std::vector<double> minRange = domain->getMinimumActionRange();
+
+  /* Convert to tuple of continuous numbers */
+  int temp;
+  double u;
+  unsigned int i = 0;
+  for(i = 0; i < maxRange.size()-1; i++) {
+    temp = a % numofgrids;
+    u = (maxRange[i] - minRange[i]) * a / (numofgrids - 1) - minRange[i];
+    action.push_back(u);
+    a = (a - temp) / numofgrids;
+  }
+
+  u = (maxRange[i] - minRange[i]) * a / (numofgrids - 1) - minRange[i];
+  action.push_back(u);
+  
+  return action;
 }

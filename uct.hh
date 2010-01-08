@@ -59,6 +59,7 @@ private:
 
   /** Domain Dependent but Algorithm Defined */
   std::vector<int> discretizeState(State S);
+  Action continuousAction(int a);
 };
 
 #endif // UCT_HH

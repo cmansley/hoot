@@ -1,4 +1,4 @@
-
+#include "mcplanner.hh"
 
 /*
  *
@@ -19,7 +19,7 @@ void MCPlanner::setMaxQueries(int queries)
 Action MCPlanner::plan(State s)
 {
   /* Clear out data structues */
-  // FIXME
+  reset();
 
   /* Store initial number of simulated steps */
   numInitialSamples = domain->getNumSamples();
@@ -62,7 +62,7 @@ double MCPlanner::search(int depth, State s, bool terminal)
   SARS *sars = domain->simulate(s,a);  
 
   /* Compute the Q-value */
-  q = sars->reward + gamma * search(depth + 1, sars->s_prime, sars->terminal);
+  q = sars->reward + domain->getDiscountFactor() * search(depth + 1, sars->s_prime, sars->terminal);
   
   /* Update the Q-value (only if we have not exceeded our samples */
   if((domain->getNumSamples() - numInitialSamples) < maxQueries) {   // Pretty me?
