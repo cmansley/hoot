@@ -29,6 +29,9 @@ public:
   /** Return current best action */
   Action queryAction();
 
+  /** Destroy structure */
+  void clear();
+
 private:
   /** Current HOO domain */
   Domain *domain;

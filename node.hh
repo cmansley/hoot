@@ -39,6 +39,9 @@ public:
   /** Recursively insert a value at action a */
   void insertValue(Action a, double q);
 
+  /** Recursively delete subtrees */
+  void clear();
+
 private:
   /** Parent stucture */
   HOO *hoo;

@@ -40,7 +40,7 @@ Action Node::sampleAction()
 void Node::split()
 {
   /* Poor check (should throw error or something) */ 
-  if(!isLeaf()) { 
+  if(isLeaf()) { 
 
     /* Generate children */
     left = new Node(hoo);
@@ -50,7 +50,7 @@ void Node::split()
     splitDim = depth % hoo->numDim;
   
     /* Grab split point */
-    splitValue = (maxRange[splitDim] - minRange[splitDim]) / 2;  
+    splitValue = (maxRange[splitDim] - minRange[splitDim]) / 2 + minRange[splitDim];  
 
     /* Intialize nodes (expensive?) */
     left->depth = right->depth = depth + 1;
@@ -80,7 +80,7 @@ double Node::rebuildSubTree()
   /* Compute this node's B-value */
   double b1 = left->rebuildSubTree();
   double b2 = right->rebuildSubTree();
-  Bval = std::min(U, std::max(b1, b2));
+  Bval = std::min(U, std::max(b1, b2));  
 
   return Bval;
 }
@@ -93,6 +93,7 @@ void Node::bestAction(Action &a)
   /* Terminate and sample from best node */
   if(inS()) {
     a = sampleAction();
+    return;
   }
 
   /* Follow B-values down tree */
@@ -126,4 +127,21 @@ void Node::insertValue(Action a, double q)
   } else {
     right->insertValue(a, q);
   }
+}
+
+
+/*
+ *
+ */
+void Node::clear()
+{
+  if(isLeaf()) {
+    return;
+  }
+
+  left->clear();
+  right->clear();
+  
+  delete left;
+  delete right;
 }
