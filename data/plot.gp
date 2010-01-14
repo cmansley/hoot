@@ -16,9 +16,9 @@ set output 'ip.eps'
 
 set key right bottom
 
-plot 'ip_20A_30NBounds.out' using 1:3 with lines ls 14 title 'UCT 20A 30N','ip_20A_30NBounds.out' using 1:3:2:4 with yerrorbars ls 2 title '', \
-     'ip_10A_30NBounds.out' using 1:3 with lines ls 15 title 'UCT 10A 30N','ip_10A_30NBounds.out' using 1:3:2:4 with yerrorbars ls 2 title '',\
-     'ip_5A_30NBounds.out' using 1:3 with lines ls 16 title 'UCT 5A 30N','ip_5A_30NBounds.out' using 1:3:2:4 with yerrorbars ls 2 title ''
+plot 'ip_uct_20A_30NBounds.out' using 1:3 with lines ls 11 title 'UCT 20A','ip_uct_20A_30NBounds.out' using 1:3:2:4 with yerrorbars ls 2 title '', \
+     'ip_uct_5A_30NBounds.out' using 1:3 with lines ls 12 title 'UCT 5A','ip_uct_5A_30NBounds.out' using 1:3:2:4 with yerrorbars ls 2 title '', \
+     'ip_hoot_30NBounds.out' using 1:3 with lines ls 14 title 'HOOT','ip_hoot_30NBounds.out' using 1:3:2:4 with yerrorbars ls 2 title ''
 
 
 #'ipSR_30N_20A_ARBounds.out' using 1:3 with lines ls 11 title 'UCT 20A 30N','ipSR_30N_20A_ARBounds.out' using 1:3:2:4 with yerrorbars ls 2 title '', \

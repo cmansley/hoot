@@ -27,14 +27,14 @@ IP::IP(double gamma)
   
   maxStateRange[0] = M_PI;
   minStateRange[0] = -M_PI;
-  maxStateRange[1] = 2;
-  minStateRange[1] = -2;
+  maxStateRange[1] = 8;
+  minStateRange[1] = -8;
 
   maxActionRange.resize(actionDimension);
   minActionRange.resize(actionDimension);
   
   maxActionRange[0] = 50;
-  minActionRange[1] = -50;
+  minActionRange[0] = -50;
 
   /* Initialize gamma */
   this->gamma = gamma;

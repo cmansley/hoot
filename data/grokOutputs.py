@@ -5,9 +5,9 @@ import sys
 
 nameList = [
 #    ["whootIPHighNoise1.txt", "whootIPHighNoise2.txt", "whootIPHighNoise3.txt"],
-#    ["ipSR_30N_5A_CR.out", "ipSR_30N_5A_CR2.out"]    
-#    ["ip_30N_10A_8R.dat"]
-    ["ip_5A_30N.out"], ["ip_10A_30N.out"], ["ip_20A_30N.out"]
+    ["ip_uct_20A_30N.out"],
+    ["ip_hoot_30N.out"],
+    ["ip_uct_5A_30N.out"]
     ]
 
 def grokFiles(fileNames, xIndex, yIndex):

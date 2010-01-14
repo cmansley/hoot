@@ -16,8 +16,8 @@ int main()
   //Lander *domain = new Lander(0.9);
 
   /* Create and initialize planner */
-  //UCT planner(domain, 0.1);
-  HOOT planner(domain, 0.1);
+  UCT planner(domain, 0.1);
+  //HOOT planner(domain, 0.1);
   //SS planner(domain, 0.1, 1, 5);
   //Corput planner(domain, 0.1);
 

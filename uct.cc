@@ -107,10 +107,11 @@ void UCT::updateValue(int depth, SARS *sars, double qvalue)
 {
   /* Create vector of ints for state, action and depth */
   std::vector<int> sd = discretizeState(sars->s);
+  int da = discretizeAction(sars->a);
   std::vector<int> sad = sd;
   sd.push_back(depth);
   sad.push_back(depth);
-  sad.push_back((int)sars->a[0]);
+  sad.push_back(da);
 
   /* Update counts */
   Nsd[sd] += 1 ;
@@ -145,7 +146,7 @@ Action UCT::selectAction(State s, int depth, bool greedy)
   sad.push_back(depth);
   sad.push_back(0); // action slot
 
-  /* Grab the Q-value for this state action*/
+  /* Grab the Q-value for this state action */
   double rewardRange = (rmax-rmin) * (rmax-rmin);
   int nsd_temp = Nsd[sd];
   double c;
@@ -153,7 +154,7 @@ Action UCT::selectAction(State s, int depth, bool greedy)
   for(int action=0; action < k; action++) {
     sad.back() = action;
     if(Q.find(sad) != Q.end()) {
-      /* Do not include bonus term in greedy operation*/
+      /* Do not include bonus term in greedy operation */
       c = 0;
       if(!greedy) {
 	c = sqrt(rewardRange * log(nsd_temp) / (float) Nsad[sad]);
@@ -179,7 +180,7 @@ Action UCT::selectAction(State s, int depth, bool greedy)
   }
 
   Action a = continuousAction(discreteAction);
-  
+
   return a;
 }
 
@@ -209,12 +210,43 @@ std::vector<int> UCT::discretizeState(State s)
 /*
  *
  */
+int UCT::discretizeAction(Action a)
+{  
+  /* Random Discretization - FIX ME */
+  int numofgrids = domain->getNumActions();
+
+  /* Get range of attributes */
+  std::vector<double> maxRange = domain->getMaximumActionRange();
+  std::vector<double> minRange = domain->getMinimumActionRange();
+ 
+  int id = 0;
+  int temp;
+  for(unsigned int i=0; i<a.size(); i++) {
+    id *= numofgrids;
+
+    temp = (int) floor(numofgrids / (maxRange[i] - minRange[i]) * (a[i] - minRange[i]));
+    /* Handle upper end */
+    if(temp == numofgrids) {
+      temp = temp - 1;
+    }
+
+    id += temp;
+    
+  }
+
+  return temp;
+}
+
+
+/*
+ *
+ */
 Action UCT::continuousAction(int a)
 {
   Action action;
   
   /* Must bubble this parameter up to the top */
-  int numofgrids = 20;
+  int numofgrids = domain->getNumActions();
 
   /* Get range of attributes */
   std::vector<double> maxRange = domain->getMaximumActionRange();
@@ -226,12 +258,12 @@ Action UCT::continuousAction(int a)
   unsigned int i = 0;
   for(i = 0; i < maxRange.size()-1; i++) {
     temp = a % numofgrids;
-    u = (maxRange[i] - minRange[i]) * a / (numofgrids - 1) - minRange[i];
+    u = (maxRange[i] - minRange[i]) * a / (numofgrids - 1) + minRange[i];
     action.push_back(u);
     a = (a - temp) / numofgrids;
   }
 
-  u = (maxRange[i] - minRange[i]) * a / (numofgrids - 1) - minRange[i];
+  u = (maxRange[i] - minRange[i]) * a / (numofgrids - 1) + minRange[i];
   action.push_back(u);
   
   return action;
