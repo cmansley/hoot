@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include "mcplanner.hh"
 
@@ -10,9 +11,10 @@ void MCPlanner::setMaxQueries(int queries)
   /* Store sweet queries */
   maxQueries = queries;
 
-  /* Set max depth here based on some cool math */
-  // maxDepth = logblah blah FIXME
-  maxDepth = 100;
+  /* Set max depth here based on epsilon-horizon time */
+  double gamma = domain->getDiscountFactor();
+  double rmax = domain->getRmax();
+  maxDepth = (int) ceil( log(epsilon*(1-gamma)/rmax)/log(gamma) );
 }
 
 /*
