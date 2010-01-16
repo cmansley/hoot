@@ -29,7 +29,7 @@ public:
   State getInitialState( ) { return initialState; }
 
   /** Get number of discrete actions for domain */
-  int getNumActions( ) { return numActions; }
+  int getNumDiscreteActions( ) { return numDiscreteActions; }
 
   /** Get discount factor for domain */
   double getDiscountFactor( ) { return gamma; }
@@ -75,7 +75,7 @@ private:
   static const double rmax = 1;
 
   // only if discrete actions
-  static const int numActions = 20;
+  static const int numDiscreteActions = 20;
 
   /** Domain Properties */
   double gamma;

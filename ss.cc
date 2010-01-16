@@ -20,7 +20,7 @@ void SS::setMaxQueries(int queries)
   maxQueries = queries; 
   
   int N = queries;
-  int A = domain->getNumActions();
+  int A = domain->getNumDiscreteActions();
 
   C = 1;
   H = (int) (log(N*A*C-N+1)/log(A*C) - 1);
@@ -52,7 +52,7 @@ Action SS::plan(State s)
  */
 std::vector<double> SS::estimateQ(int h, State s)
 {
-  std::vector<double> Q(domain->getNumActions());
+  std::vector<double> Q(domain->getNumDiscreteActions());
 
   /* Initialize Q to zero */
   std::fill(Q.begin(), Q.end(), 0.0);

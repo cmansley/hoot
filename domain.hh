@@ -41,7 +41,7 @@ public:
   virtual State getInitialState( ) = 0;
 
   /** Get number of discrete actions for domain */
-  virtual int getNumActions( ) = 0;
+  virtual int getNumDiscreteActions( ) = 0;
 
   /** Get discount factor for domain */
   virtual double getDiscountFactor( ) = 0;

@@ -60,7 +60,7 @@ Action UCT::selectAction(State s, int depth, bool greedy)
 {
   std::vector<int> vmaxActions;
 
-  int k = domain->getNumActions();
+  int k = domain->getNumDiscreteActions();
 
   /* Create vector of ints for state, action and depth */
   std::vector<int> sd = discretizeState(s);
@@ -147,7 +147,7 @@ std::vector<int> UCT::discretizeState(State s)
 int UCT::discretizeAction(Action a)
 {  
   /* Random Discretization - FIX ME */
-  int numofgrids = domain->getNumActions();
+  int numofgrids = domain->getNumDiscreteActions();
 
   /* Get range of attributes */
   std::vector<double> maxRange = domain->getMaximumActionRange();
@@ -180,7 +180,7 @@ Action UCT::continuousAction(int a)
   Action action;
   
   /* Must bubble this parameter up to the top */
-  int numofgrids = domain->getNumActions();
+  int numofgrids = domain->getNumDiscreteActions();
 
   /* Get range of attributes */
   std::vector<double> maxRange = domain->getMaximumActionRange();
