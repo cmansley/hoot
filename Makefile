@@ -44,4 +44,4 @@ mcplanner.o: mcplanner.cc mcplanner.hh
 	g++ -c $(CFLAGS) mcplanner.cc $(INCLUDES)
 
 clean:
-	rm *~ *.o plan
+	rm -f *~ *.o plan
