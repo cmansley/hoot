@@ -1,0 +1,8 @@
+# Object files
+*.o
+
+# Temp files
+*~
+
+# Executable files
+plan
