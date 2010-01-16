@@ -31,6 +31,7 @@ HOO::HOO(Domain *d) : domain(d), totalSamples(0)
 HOO::~HOO()
 {
   /* Delete all memory recursivly? */
+  tree->clear();
 
   /* Delete root of tree */
   delete tree;
@@ -75,7 +76,6 @@ void HOO::clear()
   /* Initialize root of tree */
   tree = new Node(this);
   tree->rangeInit(domain->getMinimumActionRange(), domain->getMaximumActionRange());
-
 }
 
 
