@@ -7,7 +7,7 @@
 #include "uct.hh"
 
 
-UCT::UCT(Domain *d, double epsilon) : Planner(d, epsilon)
+UCT::UCT(Domain *d, double epsilon) : MCPlanner(d, epsilon)
 {
 }
 
@@ -21,83 +21,6 @@ void UCT::initialize()
   rmin = domain->getRmin();
   gamma = domain->getDiscountFactor();
   vmax = rmax/(1-gamma);
-}
-
-/*
- *
- */
-void UCT::setMaxQueries(int queries)
-{
-  /* Sort sweet queries */
-  maxQueries = queries;
-
-  /* Set max depth here based on some cool math */
-  // maxDepth = logblah blah 
-  maxDepth = 100;
-}
-
-/*
- *
- */
-Action UCT::plan(State s)
-{
-  /* Clear out data structues */
-  Nsd.clear();
-  Nsad.clear();
-  Q.clear();  
-
-  /* Store initial number of simulated steps */
-  numInitialSamples = domain->getNumSamples();
-  
-  /* Do your rollouts */
-  while((domain->getNumSamples() - numInitialSamples) < maxQueries) {
-    search(0, s, false);
-  }
-
-  Action a(1);
-  a = selectAction(s, 0, true);
-          
-  return a;
-}
-
-
-/*
- *
- */
-double UCT::search(int depth, State s, bool terminal)
-{
-  double q;
-
-  /* Terminate if a terminal state has been reached */
-  if(terminal) {
-    return 0;
-  }
-
-  /* Return if exceeded the maximum rollout depth (possible use a
-   * heuristic not zero) 
-   */
-  if(depth > maxDepth) {
-    return 0;
-  }
-
-  /* select the next action according to the UCT heuristic */
-  Action a(1);
-  a = selectAction(s, depth, false);
-
-  /* Sample next state from generative model */
-  SARS *sars = domain->simulate(s,a);  
-
-  /* Compute the Q-value */
-  q = sars->reward + gamma * search(depth + 1, sars->s_prime, sars->terminal);
-  
-  /* Update the Q-value (only if we have not exceeded our samples */
-  if((domain->getNumSamples() - numInitialSamples) < maxQueries) {
-    updateValue(depth, sars, q);
-  }
-
-  delete sars;
-
-  return q;
 }
 
 /*
@@ -182,6 +105,17 @@ Action UCT::selectAction(State s, int depth, bool greedy)
   Action a = continuousAction(discreteAction);
 
   return a;
+}
+
+/*
+ *
+ */
+void UCT::reset()
+{
+  /* Clear out data structues */
+  Nsd.clear();
+  Nsad.clear();
+  Q.clear();  
 }
 
 /*

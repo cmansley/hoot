@@ -11,10 +11,10 @@
 #include <string>
 #include <vector>
 
-#include "planner.hh"
+#include "mcplanner.hh"
 #include "domain.hh"
 
-class UCT : public Planner
+class UCT : public MCPlanner
 {
 public:
   /** Constructor */
@@ -26,22 +26,12 @@ public:
   /** Initialize the planner */
   void initialize();
 
-  /** Plan for one state */
-  Action plan(State s);
-
-  /** Restrict planner by queries */
-  void setMaxQueries(int queries);
-
 private:
   /** Local store of domain params */
   double gamma;
   double rmax;
   double rmin;
   double vmax;
-
-  /** Algorithm Parameters/Variables */
-  int maxDepth;
-  int numInitialSamples;
 
   /** Algorithm Data Structures */
   //std::map<std::vector<int>, int> Nsd;
@@ -51,11 +41,14 @@ private:
   boost::unordered_map<std::vector<int>, int> Nsad;
   boost::unordered_map<std::vector<int>, double> Q;
 
-  /** Algorithm Aux Functions */
-  double search(int depth, State s, bool terminal);
+  /** Update value */
   void updateValue(int depth, SARS *sars, double qvalue);
-  // Combine the next functions with a greedy boolean
+  
+  /** Select next action (greedily or not) */
   Action selectAction(State s, int depth, bool greedy);
+
+  /** Clear out data stuctures */
+  void reset();
 
   /** Domain Dependent but Algorithm Defined */
   std::vector<int> discretizeState(State S);
