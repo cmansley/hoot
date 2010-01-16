@@ -21,30 +21,22 @@ public:
   HOOT(Domain *d, double epsilon);
 
   /** Destructor */
-  ~HOOT() { }
+  ~HOOT() { /* Possible mem clean up? */ }
 
   /** Initialize the planner */
   void initialize();
 
 private:
-  /** Local store of domain params */
-  double gamma;
-  double rmax;
-  double rmin;
-  double vmax;
-
-  /** Algorithm Parameters/Variables */
-  int maxDepth;
-  int numInitialSamples;
-
   /** Algorithm Data Structures */
   boost::unordered_map<std::vector<int>, HOO*> HOOS;
 
-  /** Algorithm Aux Functions */
+  /** Update value */
   void updateValue(int depth, SARS *sars, double qvalue);
+  
+  /** Select next action (greedily or not) */
   Action selectAction(State s, int depth, bool greedy);
 
-  /** Reset */
+  /** Clear out data stuctures */
   void reset();
 
   /** Domain Dependent but Algorithm Defined */
