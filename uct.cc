@@ -29,7 +29,7 @@ void UCT::initialize()
 void UCT::updateValue(int depth, SARS *sars, double qvalue)
 {
   /* Create vector of ints for state, action and depth */
-  std::vector<int> sd = discretizeState(sars->s);
+  std::vector<int> sd = domain->discretizeState(sars->s);
   int da = discretizeAction(sars->a);
   std::vector<int> sad = sd;
   sd.push_back(depth);
@@ -63,7 +63,7 @@ Action UCT::selectAction(State s, int depth, bool greedy)
   int k = domain->getNumDiscreteActions();
 
   /* Create vector of ints for state, action and depth */
-  std::vector<int> sd = discretizeState(s);
+  std::vector<int> sd = domain->discretizeState(s);
   std::vector<int> sad = sd;
   sd.push_back(depth);
   sad.push_back(depth);
@@ -116,29 +116,6 @@ void UCT::reset()
   Nsd.clear();
   Nsad.clear();
   Q.clear();  
-}
-
-/*
- *
- */
-std::vector<int> UCT::discretizeState(State s)
-{
-  std::vector<int> ds;
-  
-  /* Random Discretization - BE AFRAID */
-  int numofgrids = 20;
-
-  /* Get range of attributes */
-  std::vector<double> maxRange = domain->getMaximumStateRange();
-  std::vector<double> minRange = domain->getMinimumStateRange();
- 
-  int temp;
-  for(unsigned int i=0; i<s.size(); i++) {
-    temp = (int) floor(numofgrids / (maxRange[i] - minRange[i]) * (s[i] - minRange[i]));
-    ds.push_back(temp);
-  }
-
-  return ds;
 }
 
 /*

@@ -51,7 +51,6 @@ private:
   void reset();
 
   /** Domain Dependent but Algorithm Defined */
-  std::vector<int> discretizeState(State S);
   int discretizeAction(Action a);
   Action continuousAction(int a);
 };

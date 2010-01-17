@@ -39,7 +39,7 @@ void HOOT::reset()
 void HOOT::updateValue(int depth, SARS *sars, double qvalue)
 {
   /* Create vector of ints for state, action and depth */
-  std::vector<int> sd = discretizeState(sars->s);
+  std::vector<int> sd = domain->discretizeState(sars->s);
   sd.push_back(depth);
 
   /* Insert value into HOO tree */
@@ -52,7 +52,7 @@ void HOOT::updateValue(int depth, SARS *sars, double qvalue)
 Action HOOT::selectAction(State s, int depth, bool greedy)
 {
   /* Create vector of ints for state, action and depth */
-  std::vector<int> sd = discretizeState(s);
+  std::vector<int> sd = domain->discretizeState(s);
   sd.push_back(depth);
 
   /* Pick action using HOO */
@@ -67,25 +67,3 @@ Action HOOT::selectAction(State s, int depth, bool greedy)
   return a;
 }
 
-/*
- *
- */
-std::vector<int> HOOT::discretizeState(State s)
-{
-  std::vector<int> ds;
-  
-  /* Random Discretization - BE AFRAID */
-  int numofgrids = 20;
-
-  /* Get range of attributes */
-  std::vector<double> maxRange = domain->getMaximumStateRange();
-  std::vector<double> minRange = domain->getMinimumStateRange();
- 
-  int temp;
-  for(unsigned int i=0; i<s.size(); i++) {
-    temp = (int) floor(numofgrids / (maxRange[i] - minRange[i]) * (s[i] - minRange[i]));
-    ds.push_back(temp);
-  }
-
-  return ds;
-}

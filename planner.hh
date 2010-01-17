@@ -27,7 +27,7 @@ public:
   virtual Action plan(State s) = 0;
 
   /** Restrict planner by queries */
-  void setMaxQueries(int queries) { maxQueries = queries; }
+  virtual void setMaxQueries(int queries) = 0; //{ maxQueries = queries; }
 
 protected:
   /** Storage for domain */

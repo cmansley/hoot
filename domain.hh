@@ -76,6 +76,8 @@ public:
   /** Reset number of samples */
   void resetSamples() { numSamples = 0; }
 
+  virtual std::vector<int> discretizeState(State s) = 0;
+
 protected:
   /** For randomness */
   gsl_rng *rng;

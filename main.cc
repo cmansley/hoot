@@ -12,17 +12,18 @@ int main()
 {
   /* Create domain */
   //CCL *domain = new CCL(0.9);
-  IP *domain = new IP(0.9);
+  Domain *domain = new IP(0.9);
   //Lander *domain = new Lander(0.9);
 
   /* Create and initialize planner */
+  Planner *planner = new HOOT(domain, 0.1);
   //UCT planner(domain, 0.1);
-  HOOT planner(domain, 0.1);
+  //HOOT planner(domain, 0.1);
   //SS planner(domain, 0.1, 1, 5);
   //Corput planner(domain, 0.1);
 
   /* Initialize planner */
-  planner.initialize();
+  planner->initialize();
 
   /* Initialize state/action variables */
   State s = domain->getInitialState();
@@ -42,13 +43,13 @@ int main()
     double M2 = 0.0;
 
     /* Set maximum queries planner is allowed */
-    planner.setMaxQueries(queries);
+    planner->setMaxQueries(queries);
 
     // Perform a couple of episodes
     while(n < 10) {
 
       /* Plan and execute in world */
-      a = planner.plan(s);
+      a = planner->plan(s);
       delete sars;
       sars = domain->step(s, a);
       

@@ -90,6 +90,8 @@ private:
   double alpha;
 
   double dynamics(State s, double a);
+
+  std::vector<int> discretizeState(State s);
 };
 
 #endif // DOMAIN_HH

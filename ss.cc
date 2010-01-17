@@ -23,8 +23,7 @@ void SS::setMaxQueries(int queries)
   int A = domain->getNumDiscreteActions();
 
   C = 1;
-  H = (int) (log(N*A*C-N+1)/log(A*C) - 1);
-  
+  H = (int) (log(N*A*C-N+1)/log(A*C) - 1);  
 }
 
 

@@ -38,9 +38,6 @@ private:
 
   /** Clear out data stuctures */
   void reset();
-
-  /** Domain Dependent but Algorithm Defined */
-  std::vector<int> discretizeState(State s);
 };
 
 #endif // HOOT_HH

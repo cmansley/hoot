@@ -108,3 +108,23 @@ double IP::dynamics(State s, double u)
     
   return num/den;
 }
+
+
+/*
+ *
+ */
+std::vector<int> IP::discretizeState(State s)
+{
+  std::vector<int> ds;
+  
+  /* Random Discretization - BE AFRAID */
+  int numofgrids = 20;
+ 
+  int temp;
+  for(unsigned int i=0; i<s.size(); i++) {
+    temp = (int) floor(numofgrids / (maxStateRange[i] - minStateRange[i]) * (s[i] - minStateRange[i]));
+    ds.push_back(temp);
+  }
+
+  return ds;
+}
