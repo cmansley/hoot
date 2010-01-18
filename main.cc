@@ -5,6 +5,7 @@
 #include "uct.hh"
 #include "lander.hh"
 #include "hoot.hh"
+#include "chopper.hh"
 
 using namespace std;
 
@@ -15,8 +16,11 @@ int main()
   Domain *domain = new IP(0.9);
   //Lander *domain = new Lander(0.9);
 
+  /* Create mapper from domain to planner*/
+  Chopper *chopper = new Chopper(domain);
+
   /* Create and initialize planner */
-  Planner *planner = new HOOT(domain, 0.1);
+  Planner *planner = new UCT(domain, chopper, 0.1);
   //UCT planner(domain, 0.1);
   //HOOT planner(domain, 0.1);
   //SS planner(domain, 0.1, 1, 5);

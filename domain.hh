@@ -40,9 +40,6 @@ public:
   /** Get starting state from domain */
   virtual State getInitialState( ) = 0;
 
-  /** Get number of discrete actions for domain */
-  virtual int getNumDiscreteActions( ) = 0;
-
   /** Get discount factor for domain */
   virtual double getDiscountFactor( ) = 0;
 
@@ -75,8 +72,6 @@ public:
 
   /** Reset number of samples */
   void resetSamples() { numSamples = 0; }
-
-  virtual std::vector<int> discretizeState(State s) = 0;
 
 protected:
   /** For randomness */

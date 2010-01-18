@@ -10,12 +10,13 @@
 #include "state.hh"
 #include "action.hh"
 #include "domain.hh"
+#include "chopper.hh"
 
 class Planner
 {
 public:
   /** Constructor */
-  Planner(Domain *d, double e) : domain(d), epsilon(e) { }
+  Planner(Domain *d, Chopper *c, double e) : domain(d), chopper(c), epsilon(e) { }
  
   /** Destructor */
   virtual ~Planner( ) { }
@@ -27,11 +28,14 @@ public:
   virtual Action plan(State s) = 0;
 
   /** Restrict planner by queries */
-  virtual void setMaxQueries(int queries) = 0; //{ maxQueries = queries; }
+  virtual void setMaxQueries(int queries) = 0;
 
 protected:
   /** Storage for domain */
   Domain *domain;
+
+  /** Storage for discretizer */
+  Chopper *chopper;
 
   /** Algorithm tolerence */
   double epsilon;

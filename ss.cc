@@ -7,7 +7,7 @@
 /*!
  *
  */
-SS::SS(Domain *d, double epsilon) : Planner(d, epsilon)
+SS::SS(Domain *d, Chopper *c, double epsilon) : Planner(d, c, epsilon)
 {
   
 }
@@ -20,7 +20,7 @@ void SS::setMaxQueries(int queries)
   maxQueries = queries; 
   
   int N = queries;
-  int A = domain->getNumDiscreteActions();
+  int A = chopper->getNumDiscreteActions();
 
   C = 1;
   H = (int) (log(N*A*C-N+1)/log(A*C) - 1);  
@@ -51,7 +51,7 @@ Action SS::plan(State s)
  */
 std::vector<double> SS::estimateQ(int h, State s)
 {
-  std::vector<double> Q(domain->getNumDiscreteActions());
+  std::vector<double> Q(chopper->getNumDiscreteActions());
 
   /* Initialize Q to zero */
   std::fill(Q.begin(), Q.end(), 0.0);
@@ -75,7 +75,7 @@ std::vector<double> SS::estimateQ(int h, State s)
 
     /* Average over C samples*/
     for(int k = 0; k < C; k++) {
-      sars = domain->simulate(s, a);
+      sars = domain->simulate(s, a); // FIX ME!!!!
       sum += estimateV(h - 1, sars->s_prime);
       sum_rew += sars->reward;
       delete sars;

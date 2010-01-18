@@ -80,14 +80,18 @@ SARS *IP::step(State s, Action a)
    * function of state and action, favoring small actions
    */
   if(fabs(sars->s_prime[0]) < M_PI_2) {
-    //sars->reward = -(pow(2 * sars->s_prime[0] / M_PI, 2.0) + pow(sars->s_prime[1], 2.0) + pow(u / 50, 2.0));
-    sars->reward = 1;
+    sars->reward = -(pow(2 * sars->s_prime[0] / M_PI, 2.0) + pow(sars->s_prime[1], 2.0) + pow(u / 50, 2.0));
     sars->terminal = false;
   } else {
-    //sars->reward = -1000;
-    sars->reward = 0;
+    sars->reward = -1000;
     sars->terminal = true;
-  }        
+  }
+
+  /* 
+   * Rescale reward the reward function to zero to one. This allows us
+   * to standardize our algorithms to match most theoretical work
+   */
+  sars->reward = (1 - 0) / (0 - (-1000)) * (sars->reward - (-1000));
 
   return sars;
 }
@@ -107,24 +111,4 @@ double IP::dynamics(State s, double u)
   den = 4.0 * l / 3.0 - alpha * mp * l * pow(cos(theta), 2.0);
     
   return num/den;
-}
-
-
-/*
- *
- */
-std::vector<int> IP::discretizeState(State s)
-{
-  std::vector<int> ds;
-  
-  /* Random Discretization - BE AFRAID */
-  int numofgrids = 20;
- 
-  int temp;
-  for(unsigned int i=0; i<s.size(); i++) {
-    temp = (int) floor(numofgrids / (maxStateRange[i] - minStateRange[i]) * (s[i] - minStateRange[i]));
-    ds.push_back(temp);
-  }
-
-  return ds;
 }

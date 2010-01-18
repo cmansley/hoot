@@ -12,13 +12,14 @@
 #include <vector>
 
 #include "mcplanner.hh"
+#include "chopper.hh"
 #include "domain.hh"
 
 class UCT : public MCPlanner
 {
 public:
   /** Constructor */
-  UCT(Domain *d, double epsilon);
+  UCT(Domain *d, Chopper *c, double epsilon);
 
   /** Destructor */
   ~UCT() { }
@@ -49,10 +50,6 @@ private:
 
   /** Clear out data stuctures */
   void reset();
-
-  /** Domain Dependent but Algorithm Defined */
-  int discretizeAction(Action a);
-  Action continuousAction(int a);
 };
 
 #endif // UCT_HH

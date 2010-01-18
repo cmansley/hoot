@@ -7,7 +7,7 @@
 #include "uct.hh"
 
 
-UCT::UCT(Domain *d, double epsilon) : MCPlanner(d, epsilon)
+UCT::UCT(Domain *d, Chopper *c, double epsilon) : MCPlanner(d, c, epsilon)
 {
 }
 
@@ -29,8 +29,8 @@ void UCT::initialize()
 void UCT::updateValue(int depth, SARS *sars, double qvalue)
 {
   /* Create vector of ints for state, action and depth */
-  std::vector<int> sd = domain->discretizeState(sars->s);
-  int da = discretizeAction(sars->a);
+  std::vector<int> sd = chopper->discretizeState(sars->s);
+  int da = chopper->discretizeAction(sars->a);
   std::vector<int> sad = sd;
   sd.push_back(depth);
   sad.push_back(depth);
@@ -60,17 +60,16 @@ Action UCT::selectAction(State s, int depth, bool greedy)
 {
   std::vector<int> vmaxActions;
 
-  int k = domain->getNumDiscreteActions();
+  int k = chopper->getNumDiscreteActions();
 
   /* Create vector of ints for state, action and depth */
-  std::vector<int> sd = domain->discretizeState(s);
+  std::vector<int> sd = chopper->discretizeState(s);
   std::vector<int> sad = sd;
   sd.push_back(depth);
   sad.push_back(depth);
   sad.push_back(0); // action slot
 
   /* Grab the Q-value for this state action */
-  double rewardRange = (rmax-rmin) * (rmax-rmin);
   int nsd_temp = Nsd[sd];
   double c;
   std::vector<double> qtemp;
@@ -80,7 +79,7 @@ Action UCT::selectAction(State s, int depth, bool greedy)
       /* Do not include bonus term in greedy operation */
       c = 0;
       if(!greedy) {
-	c = sqrt(rewardRange * log(nsd_temp) / (float) Nsad[sad]);
+	c = sqrt(2 * log(nsd_temp) / (float) Nsad[sad]);
       }
       /* Store Q-value plus bonus term*/
       qtemp.push_back(Q[sad] + c);
@@ -102,7 +101,7 @@ Action UCT::selectAction(State s, int depth, bool greedy)
     discreteAction = vmaxActions[0];
   }
 
-  Action a = continuousAction(discreteAction);
+  Action a = chopper->continuousAction(discreteAction);
 
   return a;
 }
@@ -116,66 +115,4 @@ void UCT::reset()
   Nsd.clear();
   Nsad.clear();
   Q.clear();  
-}
-
-/*
- *
- */
-int UCT::discretizeAction(Action a)
-{  
-  /* Random Discretization - FIX ME */
-  int numofgrids = domain->getNumDiscreteActions();
-
-  /* Get range of attributes */
-  std::vector<double> maxRange = domain->getMaximumActionRange();
-  std::vector<double> minRange = domain->getMinimumActionRange();
- 
-  int id = 0;
-  int temp;
-  for(unsigned int i=0; i<a.size(); i++) {
-    id *= numofgrids;
-
-    temp = (int) floor(numofgrids / (maxRange[i] - minRange[i]) * (a[i] - minRange[i]));
-    /* Handle upper end */
-    if(temp == numofgrids) {
-      temp = temp - 1;
-    }
-
-    id += temp;
-    
-  }
-
-  return temp;
-}
-
-
-/*
- *
- */
-Action UCT::continuousAction(int a)
-{
-  Action action;
-  
-  /* Must bubble this parameter up to the top */
-  int numofgrids = domain->getNumDiscreteActions();
-
-  /* Get range of attributes */
-  std::vector<double> maxRange = domain->getMaximumActionRange();
-  std::vector<double> minRange = domain->getMinimumActionRange();
-
-  /* Convert to tuple of continuous numbers */
-  int temp;
-  double u;
-  unsigned int i = 0;
-  for(i = 0; i < maxRange.size()-1; i++) {
-    temp = a % numofgrids;
-    u = (maxRange[i] - minRange[i]) * a / (numofgrids - 1) + minRange[i];
-    action.push_back(u);
-    a = (a - temp) / numofgrids;
-  }
-
-  u = (maxRange[i] - minRange[i]) * a / (numofgrids - 1) + minRange[i];
-  action.push_back(u);
-  
-  return action;
 }

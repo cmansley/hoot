@@ -12,12 +12,13 @@
 #include "state.hh"
 #include "action.hh"
 #include "domain.hh"
+#include "chopper.hh"
 
 class SS : public Planner
 {
 public:
   /** Constructor */
-  SS(Domain *d, double epsilon);
+  SS(Domain *d, Chopper *c, double epsilon);
 
   /** Destructor */
   ~SS() { }

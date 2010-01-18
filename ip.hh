@@ -28,9 +28,6 @@ public:
   /** Get starting state from domain */
   State getInitialState( ) { return initialState; }
 
-  /** Get number of discrete actions for domain */
-  int getNumDiscreteActions( ) { return numDiscreteActions; }
-
   /** Get discount factor for domain */
   double getDiscountFactor( ) { return gamma; }
 
@@ -69,13 +66,8 @@ private:
   std::vector<double> minActionRange;
   static const int stateDimension = 2;
   static const int actionDimension = 1;
-  //static const double rmin = -1000;
-  //static const double rmax = 0;
   static const double rmin = 0;
   static const double rmax = 1;
-
-  // only if discrete actions
-  static const int numDiscreteActions = 20;
 
   /** Domain Properties */
   double gamma;
@@ -90,8 +82,6 @@ private:
   double alpha;
 
   double dynamics(State s, double a);
-
-  std::vector<int> discretizeState(State s);
 };
 
 #endif // DOMAIN_HH

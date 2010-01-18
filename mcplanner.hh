@@ -11,12 +11,13 @@
 #include "action.hh"
 #include "planner.hh"
 #include "domain.hh"
+#include "chopper.hh"
 
 class MCPlanner : public Planner
 {
 public:
   /** Constructor */
-  MCPlanner(Domain *d, double e) : Planner(d, e) { }
+  MCPlanner(Domain *d, Chopper *c, double e) : Planner(d, c, e) { }
  
   /** Destructor */
   virtual ~MCPlanner( ) { }

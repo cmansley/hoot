@@ -12,13 +12,14 @@
 
 #include "mcplanner.hh"
 #include "domain.hh"
+#include "chopper.hh"
 #include "hoo.hh"
 
 class HOOT : public MCPlanner
 {
 public:
   /** Constructor */
-  HOOT(Domain *d, double epsilon);
+  HOOT(Domain *d, Chopper *c, double epsilon);
 
   /** Destructor */
   ~HOOT() { /* Possible mem clean up? */ }

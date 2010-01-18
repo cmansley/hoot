@@ -9,7 +9,7 @@
 /*
  *
  */
-HOOT::HOOT(Domain *d, double epsilon) : MCPlanner(d, epsilon)
+HOOT::HOOT(Domain *d, Chopper *c, double epsilon) : MCPlanner(d, c, epsilon)
 {
 }
 
@@ -39,7 +39,7 @@ void HOOT::reset()
 void HOOT::updateValue(int depth, SARS *sars, double qvalue)
 {
   /* Create vector of ints for state, action and depth */
-  std::vector<int> sd = domain->discretizeState(sars->s);
+  std::vector<int> sd = chopper->discretizeState(sars->s);
   sd.push_back(depth);
 
   /* Insert value into HOO tree */
@@ -52,7 +52,7 @@ void HOOT::updateValue(int depth, SARS *sars, double qvalue)
 Action HOOT::selectAction(State s, int depth, bool greedy)
 {
   /* Create vector of ints for state, action and depth */
-  std::vector<int> sd = domain->discretizeState(s);
+  std::vector<int> sd = chopper->discretizeState(s);
   sd.push_back(depth);
 
   /* Pick action using HOO */

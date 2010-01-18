@@ -1,11 +1,11 @@
 CFLAGS=-Wall -g#-pg
 INCLUDES=-I/home/cmansley/boost_1_41_0
 
-plan: main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o gaussian.o hoot.o mcplanner.o
-	g++ $(CFLAGS) -o plan main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o hoot.o mcplanner.o -lgsl -lgslcblas -lm
+plan: main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o gaussian.o hoot.o mcplanner.o chopper.o
+	g++ $(CFLAGS) -o plan main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o hoot.o mcplanner.o chopper.o -lgsl -lgslcblas -lm
 
-temp: temp.o gaussian.o hoo.o node.o
-	g++ $(CFLAGS) -o temp temp.o gaussian.o hoo.o node.o -lgsl -lgslcblas -lm
+temp: temp.o gaussian.o hoo.o node.o chopper.o ip.o
+	g++ $(CFLAGS) -o temp temp.o gaussian.o hoo.o node.o ip.o chopper.o -lgsl -lgslcblas -lm
 
 temp.o: temp.cc
 	g++ -c $(CFLAGS) temp.cc $(INCLUDES)
@@ -43,5 +43,8 @@ hoot.o: hoot.cc hoot.hh
 mcplanner.o: mcplanner.cc mcplanner.hh
 	g++ -c $(CFLAGS) mcplanner.cc $(INCLUDES)
 
+chopper.o: chopper.cc chopper.hh
+	g++ -c $(CFLAGS) chopper.cc $(INCLUDES)
+
 clean:
-	rm -f *~ *.o plan
+	rm -f *~ *.o plan temp
