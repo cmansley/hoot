@@ -91,7 +91,7 @@ SARS *IP::step(State s, Action a)
    * Rescale reward the reward function to zero to one. This allows us
    * to standardize our algorithms to match most theoretical work
    */
-  sars->reward = (1 - 0) / (0 - (-1000)) * (sars->reward - (-1000));
+  sars->reward = (1.0 - 0.0) / (0.0 - (-1000.0)) * (sars->reward - (-1000.0));
 
   return sars;
 }

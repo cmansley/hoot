@@ -14,7 +14,7 @@
 /*
  *
  */
-Node::Node(HOO *h) : hoo(h), left(NULL), right(NULL), sum(0), nsamples(0), depth(0), Sflag(true) 
+Node::Node(HOO *h) : hoo(h), left(NULL), right(NULL), mu(0), nsamples(0), depth(0), Sflag(true) 
 { 
   Bval = std::numeric_limits<double>::infinity(); 
 }
@@ -50,7 +50,7 @@ void Node::split()
     splitDim = depth % hoo->numDim;
   
     /* Grab split point */
-    splitValue = (maxRange[splitDim] - minRange[splitDim]) / 2 + minRange[splitDim];  
+    splitValue = (maxRange[splitDim] - minRange[splitDim]) / 2.0 + minRange[splitDim];  
 
     /* Intialize nodes (expensive?) */
     left->depth = right->depth = depth + 1;
@@ -74,8 +74,7 @@ double Node::rebuildSubTree()
   }
 
   /* Compute values */
-  double mu = sum/nsamples;
-  double U = mu + sqrt(2*log(hoo->totalSamples)/nsamples) + hoo->v1*pow(hoo->rho, depth); 
+  double U = mu + sqrt(2.0*log(hoo->totalSamples)/nsamples) + hoo->v1*pow(hoo->rho, depth); 
 
   /* Compute this node's B-value */
   double b1 = left->rebuildSubTree();
@@ -88,7 +87,7 @@ double Node::rebuildSubTree()
 /*
  *
  */
-void Node::bestAction(Action &a)
+void Node::bestAction(Action &a, bool greedy)
 { 
   /* Terminate and sample from best node */
   if(inS()) {
@@ -96,11 +95,19 @@ void Node::bestAction(Action &a)
     return;
   }
 
-  /* Follow B-values down tree */
-  if(left->Bval < right->Bval)
-    right->bestAction(a);
-  else 
-    left->bestAction(a);
+  if(!greedy) {
+    /* Follow B-values down tree */
+    if(left->Bval < right->Bval)
+      right->bestAction(a, greedy);
+    else 
+      left->bestAction(a, greedy);
+  } else {
+    /* Follow mu down tree */
+    if(left->mu < right->mu)
+      right->bestAction(a, greedy);
+    else 
+      left->bestAction(a, greedy);
+  }
 }
 
 
@@ -109,10 +116,10 @@ void Node::bestAction(Action &a)
  */
 void Node::insertValue(Action a, double q)
 {
-  /* Update the number of samples and sum of returns in this
+  /* Update the number of samples and mean of returns in this
      subtree */
   nsamples++;
-  sum += q;
+  mu = mu + (q-mu)/nsamples;
 
   /* If in the set S, recursion is done */
   if(inS()) {
@@ -129,7 +136,6 @@ void Node::insertValue(Action a, double q)
   }
 }
 
-
 /*
  *
  */
@@ -144,4 +150,19 @@ void Node::clear()
   
   delete left;
   delete right;
+}
+
+/*
+ *
+ */
+void Node::print()
+{
+  if(inS()) {
+    return;
+  }
+  
+  std::cout << depth << " " <<  splitValue << std::endl;
+  
+  left->print();
+  right->print();
 }

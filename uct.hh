@@ -27,6 +27,8 @@ public:
   /** Initialize the planner */
   void initialize();
 
+  void print(State s);
+
 private:
   /** Local store of domain params */
   double gamma;

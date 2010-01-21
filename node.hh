@@ -34,13 +34,15 @@ public:
   double rebuildSubTree();
 
   /** Return the currently best action */
-  void bestAction(Action &a);
+  void bestAction(Action &a, bool greedy);
 
   /** Recursively insert a value at action a */
   void insertValue(Action a, double q);
 
   /** Recursively delete subtrees */
   void clear();
+
+  void print();
 
 private:
   /** Parent stucture */
@@ -51,7 +53,7 @@ private:
   Node *right;
 
   /** HOO Values */
-  double sum;
+  double mu;
   int nsamples;
   double Bval;
   int depth;

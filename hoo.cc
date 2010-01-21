@@ -11,7 +11,7 @@
 /*
  *
  */
-HOO::HOO(Domain *d) : domain(d), totalSamples(0)
+HOO::HOO(Domain *d, Chopper *c) : domain(d), chopper(c), totalSamples(0)
 {
   /* Initialize random elements */
   rng = gsl_rng_alloc(gsl_rng_taus);
@@ -21,7 +21,7 @@ HOO::HOO(Domain *d) : domain(d), totalSamples(0)
 
   /* Initialize root of tree */
   tree = new Node(this);
-  tree->rangeInit(domain->getMinimumActionRange(), domain->getMaximumActionRange());
+  tree->rangeInit(chopper->minActionZero(), chopper->maxActionOne());
 
   /* Initialize parameters using advice from paper */
   v1 = sqrt(numDim)/2;
@@ -54,11 +54,11 @@ void HOO::insertAction(Action a, double q)
 /*
  *
  */
-Action HOO::queryAction()
+Action HOO::queryAction(bool greedy)
 {
   Action a;
 
-  tree->bestAction(a);
+  tree->bestAction(a, greedy);
 
   return a;
 }
@@ -75,8 +75,10 @@ void HOO::clear()
 
   /* Initialize root of tree */
   tree = new Node(this);
-  tree->rangeInit(domain->getMinimumActionRange(), domain->getMaximumActionRange());
+  tree->rangeInit(chopper->minActionZero(), chopper->maxActionOne());
 }
 
-
-
+void HOO::print()
+{
+  tree->print();
+}

@@ -11,6 +11,11 @@ Chopper::Chopper(Domain *d) : domain(d)
   minStateRange = domain->getMinimumStateRange();
   maxActionRange = domain->getMaximumActionRange();
   minActionRange = domain->getMinimumActionRange();
+
+  zero.resize(domain->getActionDimension());
+  one.resize(domain->getActionDimension());
+  std::fill(zero.begin(), zero.end(), 0.0);  
+  std::fill(one.begin(), one.end(), 1.0);  
 }
 
 /*
@@ -55,13 +60,13 @@ int Chopper::discretizeAction(Action a)
 /*
  *
  */
-State Chopper::rescaleState(State s)
+Action Chopper::scaledownAction(Action a)
 {
-  State out;
+  Action out;
   
   double temp;
-  for(unsigned int i=0; i<s.size(); i++) {
-    temp = ((1 - 0) / (maxStateRange[i] - minStateRange[i])) * (s[i] - minStateRange[i]);
+  for(unsigned int i=0; i<a.size(); i++) {
+    temp = ((1.0 - 0.0) / (maxActionRange[i] - minActionRange[i])) * (a[i] - minActionRange[i]);
     out.push_back(temp);
   }
 
@@ -71,18 +76,19 @@ State Chopper::rescaleState(State s)
 /*
  *
  */
-Action Chopper::rescaleAction(Action s)
+Action Chopper::scaleupAction(Action a)
 {
   Action out;
   
   double temp;
-  for(unsigned int i=0; i<s.size(); i++) {
-    temp = ((1 - 0) / (maxActionRange[i] - minActionRange[i])) * (s[i] - minActionRange[i]);
+  for(unsigned int i=0; i<a.size(); i++) {
+    temp = ((maxActionRange[i] - minActionRange[i]) / (1.0 - 0.0)) * a[i] + minActionRange[i];
     out.push_back(temp);
   }
 
   return out;
 }
+
 
 
 /*

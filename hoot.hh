@@ -27,6 +27,8 @@ public:
   /** Initialize the planner */
   void initialize();
 
+  void print(State s);
+
 private:
   /** Algorithm Data Structures */
   boost::unordered_map<std::vector<int>, HOO*> HOOS;

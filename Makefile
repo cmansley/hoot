@@ -1,4 +1,4 @@
-CFLAGS=-Wall -g#-pg
+CFLAGS=-Wall -g #-pg
 INCLUDES=-I/home/cmansley/boost_1_41_0
 
 plan: main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o gaussian.o hoot.o mcplanner.o chopper.o

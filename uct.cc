@@ -2,6 +2,7 @@
  * Code by Chris Mansley
  */
 #include <iostream>
+#include <iterator>
 #include <cmath>
 
 #include "uct.hh"
@@ -87,7 +88,6 @@ Action UCT::selectAction(State s, int depth, bool greedy)
       qtemp.push_back(vmax);
       vmaxActions.push_back(action);
     }
-
   }
 
   /* Create max action or random if there are more than one */
@@ -115,4 +115,41 @@ void UCT::reset()
   Nsd.clear();
   Nsad.clear();
   Q.clear();  
+}
+
+
+void UCT::print(State s)
+{
+  int depth = 0;
+  int k = chopper->getNumDiscreteActions();
+
+  /* Create vector of ints for state, action and depth */
+  std::vector<int> sd = chopper->discretizeState(s);
+  std::vector<int> sad = sd;
+  sd.push_back(depth);
+  sad.push_back(depth);
+  sad.push_back(0); // action slot
+
+  /* Grab the Q-value for this state action */
+  int nsd_temp = Nsd[sd];
+  double c;
+  std::vector<double> qtemp;
+  for(int action=0; action < k; action++) {
+    sad.back() = action;
+    if(Q.find(sad) != Q.end()) {
+      /* Do not include bonus term in greedy operation */
+      c = sqrt(2 * log(nsd_temp) / (float) Nsad[sad]);
+      /* Store Q-value plus bonus term*/
+      qtemp.push_back(Q[sad] + c);
+      std::cout<<Nsad[sad]<<",";
+    } else {
+      qtemp.push_back(vmax);
+      std::cout<<"0,";
+    }
+  }
+  std::cout<<std::endl;
+
+  /* Debug */
+  std::copy(qtemp.begin(), qtemp.end(), std::ostream_iterator<double>(std::cout, ","));
+  std::cout << std::endl;
 }

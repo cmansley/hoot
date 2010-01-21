@@ -10,6 +10,7 @@
 #include <gsl/gsl_randist.h>
 
 #include "domain.hh"
+#include "chopper.hh"
 #include "action.hh"
 
 class Node;
@@ -18,7 +19,7 @@ class HOO
 {
 public:
   /** Constructor */
-  HOO(Domain *d);
+  HOO(Domain *d, Chopper *c);
 
   /** Destructor */
   ~HOO();
@@ -27,14 +28,19 @@ public:
   void insertAction(Action a, double q);
 
   /** Return current best action */
-  Action queryAction();
+  Action queryAction(bool greedy);
 
   /** Destroy structure */
   void clear();
 
+  void print();
+
 private:
   /** Current HOO domain */
   Domain *domain;
+
+  /** Current chopper */
+  Chopper *chopper;
 
   /** For randomness */
   gsl_rng *rng;
@@ -51,7 +57,7 @@ private:
   /** HOO parameters */
   double v1;
   double rho;
-
+  
   /** Allow Node to access HOO */
   friend class Node;
 };

@@ -65,12 +65,16 @@ double MCPlanner::search(int depth, State s, bool terminal)
   /* Sample next state from generative model */
   SARS *sars = domain->simulate(s,a);  
 
+  /* Grab discount factor */
+  double gamma = domain->getDiscountFactor();
+
   /* Compute the Q-value */
-  q = sars->reward + domain->getDiscountFactor() * search(depth + 1, sars->s_prime, sars->terminal);
+  q = sars->reward + gamma * search(depth + 1, sars->s_prime, sars->terminal);
   
   /* Update the Q-value (only if we have not exceeded our samples */
   if((domain->getNumSamples() - numInitialSamples) < maxQueries) {   // Pretty me?
-    updateValue(depth, sars, q);
+    double vmax = (1-pow(gamma, maxDepth-depth+1))/(1-gamma);
+    updateValue(depth, sars, q/vmax);
   }
 
   delete sars;

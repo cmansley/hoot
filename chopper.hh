@@ -35,7 +35,10 @@ public:
   State rescaleState(State s);
 
   /** Convert domain continuous to continuous action */
-  Action rescaleAction(Action a);
+  Action scaledownAction(Action a);
+
+  /** Convert domain continuous to continuous action */
+  Action scaleupAction(Action a);
 
   /** Concert discrete state back to continuous state */
 
@@ -44,6 +47,9 @@ public:
 
   /** Return number of discrete actions offered by this chopper */
   int getNumDiscreteActions() { return (int)pow(actionGrid, maxActionRange.size()); }
+
+  std::vector<double> minActionZero() { return zero; }
+  std::vector<double> maxActionOne() { return one; }
 
 private:
   /** Storage for domain */
@@ -62,6 +68,9 @@ private:
   std::vector<double> minStateRange;
   std::vector<double> maxActionRange;
   std::vector<double> minActionRange;
+
+  std::vector<double> zero;
+  std::vector<double> one;
 
 };
 
