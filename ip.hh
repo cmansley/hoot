@@ -84,4 +84,4 @@ private:
   double dynamics(State s, double a);
 };
 
-#endif // DOMAIN_HH
+#endif // IP_HH
