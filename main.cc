@@ -54,6 +54,7 @@ int main()
 
       /* Plan and execute in world */
       a = planner->plan(s);
+      //cout << a[0] <<endl;
       delete sars;
       sars = domain->step(s, a);
       
