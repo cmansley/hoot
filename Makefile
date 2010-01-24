@@ -1,8 +1,8 @@
 CFLAGS=-Wall -g #-pg
 INCLUDES=-I/home/cmansley/boost_1_41_0
 
-plan: main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o gaussian.o hoot.o mcplanner.o chopper.o di.o lqr.o
-	g++ $(CFLAGS) -o plan main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o hoot.o mcplanner.o chopper.o di.o lqr.o -lgsl -lgslcblas -lm
+plan: main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o gaussian.o hoot.o mcplanner.o chopper.o di.o lqr.o ddi.o
+	g++ $(CFLAGS) -o plan main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o hoot.o mcplanner.o chopper.o di.o lqr.o ddi.o -lgsl -lgslcblas -lm
 
 temp: temp.o gaussian.o hoo.o node.o chopper.o ip.o
 	g++ $(CFLAGS) -o temp temp.o gaussian.o hoo.o node.o ip.o chopper.o -lgsl -lgslcblas -lm
@@ -48,6 +48,9 @@ chopper.o: chopper.cc chopper.hh
 
 di.o: di.cc di.hh
 	g++ -c $(CFLAGS) di.cc $(INCLUDES)
+
+ddi.o: ddi.cc ddi.hh
+	g++ -c $(CFLAGS) ddi.cc $(INCLUDES)
 
 lqr.o: lqr.cc lqr.hh
 	g++ -c $(CFLAGS) lqr.cc $(INCLUDES)
