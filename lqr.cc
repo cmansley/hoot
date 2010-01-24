@@ -21,9 +21,11 @@ void LQR::initialize()
 
 Action LQR::plan(State s)
 {
-  Action a(1);
+  Action a(domain->getActionDimension());
 
-  a[0] = -(s[0]*sqrt(2) + s[1]);
+  for(unsigned int i=0; i<a.size(); i++) {
+    a[i] = -(s[i]*sqrt(2) + s[i+a.size()]);
+  }
 
   return a;
 }

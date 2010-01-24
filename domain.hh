@@ -23,6 +23,7 @@ public:
   {   
     /* Initialize random elements */
     rng = gsl_rng_alloc(gsl_rng_taus);
+    gsl_rng_set(rng, rand());
 
     /* Initialize number of samples */
     numSamples = 0;

@@ -15,6 +15,7 @@ HOO::HOO(Domain *d, Chopper *c) : domain(d), chopper(c), totalSamples(0)
 {
   /* Initialize random elements */
   rng = gsl_rng_alloc(gsl_rng_taus);
+  gsl_rng_set(rng, rand());
 
   /* Number of action dimensions */
   numDim = domain->getActionDimension();
@@ -35,6 +36,9 @@ HOO::~HOO()
 
   /* Delete root of tree */
   delete tree;
+
+  /* Remove random number generator */
+  gsl_rng_free(rng);
 }
 
 /*
