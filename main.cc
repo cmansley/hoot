@@ -1,10 +1,14 @@
 #include <iostream>
 #include "ccl.hh"
 #include "ip.hh"
+#include "di.hh"
+
 #include "ss.hh"
 #include "uct.hh"
 #include "lander.hh"
 #include "hoot.hh"
+#include "lqr.hh"
+
 #include "chopper.hh"
 
 using namespace std;
@@ -13,7 +17,7 @@ int main()
 {
   /* Create domain */
   //CCL *domain = new CCL(0.9);
-  Domain *domain = new IP(0.9);
+  Domain *domain = new DI(0.9);
   //Lander *domain = new Lander(0.9);
 
   /* Create mapper from domain to planner*/
@@ -35,7 +39,7 @@ int main()
   SARS *sars = NULL;
 
   /* Main experiment loop */
-  for(int queries = 128; queries < 4097; queries*=2) {
+  for(int queries = 1024; queries < 1025; queries*=2) {
 
     /* Initialize stats */
     int steps = 0;
@@ -50,13 +54,14 @@ int main()
     planner->setMaxQueries(queries);
 
     // Perform a couple of episodes
-    while(n < 10) {
+    while(n < 1) {
 
       /* Plan and execute in world */
       a = planner->plan(s);
-      //cout << a[0] <<endl;
       delete sars;
       sars = domain->step(s, a);
+      //cout << a[0] <<" " << sars->reward <<endl;
+      //cout << sars->s[0] << " " << sars->s[1] << " " << a[0] << endl;
       
       /* Update stats */
       steps += 1;
