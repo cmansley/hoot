@@ -74,8 +74,6 @@ private:
   /** Domain Specific */
   static const double dt;
   static const double noise;
-
-  double dynamics(State s, double a);
 };
 
 #endif // DI_HH

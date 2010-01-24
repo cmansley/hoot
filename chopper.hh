@@ -16,7 +16,7 @@ class Chopper
 {
 public:
   /** Constructor */
-  Chopper(Domain *d);
+  Chopper(Domain *d, int s, int a);
  
   /** Destructor */
   ~Chopper( ) { }
@@ -57,11 +57,11 @@ private:
 
   /** State discretization by dimension */
   //std::vector<int> stateGrid;
-  static const int stateGrid = 20;
+  int stateGrid;
   
   /** Action discretization by dimension */
   //std::vector<int> actionGrid;
-  static const int actionGrid = 20;
+  int actionGrid;
 
   /** Local domain storage */
   std::vector<double> maxStateRange; 

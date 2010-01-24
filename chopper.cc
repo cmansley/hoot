@@ -4,7 +4,7 @@
 /*
  *
  */
-Chopper::Chopper(Domain *d) : domain(d)
+Chopper::Chopper(Domain *d, int s, int a) : domain(d), stateGrid(s), actionGrid(a)
 {
   /* Store ranges locally */
   maxStateRange = domain->getMaximumStateRange();

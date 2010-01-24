@@ -17,14 +17,16 @@ int main()
 {
   /* Create domain */
   //CCL *domain = new CCL(0.9);
-  Domain *domain = new DI(0.9);
+  Domain *domain = new IP(0.95);
   //Lander *domain = new Lander(0.9);
 
+  for(int i=5; i<50; i+=10) { 
+
   /* Create mapper from domain to planner*/
-  Chopper *chopper = new Chopper(domain);
+  Chopper *chopper = new Chopper(domain, 20, i);
 
   /* Create and initialize planner */
-  Planner *planner = new UCT(domain, chopper, 0.1);
+  Planner *planner = new HOOT(domain, chopper, 0.1);
   //UCT planner(domain, 0.1);
   //HOOT planner(domain, 0.1);
   //SS planner(domain, 0.1, 1, 5);
@@ -39,7 +41,7 @@ int main()
   SARS *sars = NULL;
 
   /* Main experiment loop */
-  for(int queries = 1024; queries < 1025; queries*=2) {
+  for(int queries = 2048; queries < 2049; queries*=2) {
 
     /* Initialize stats */
     int steps = 0;
@@ -54,7 +56,7 @@ int main()
     planner->setMaxQueries(queries);
 
     // Perform a couple of episodes
-    while(n < 1) {
+    while(n < 10) {
 
       /* Plan and execute in world */
       a = planner->plan(s);
@@ -90,9 +92,14 @@ int main()
     /* Report */
     double stdev = sqrt(M2/n);
     double bound = 1.96 * stdev/sqrt(n);
-    cout << queries << " " << mean - bound << " " << mean << " " << mean + bound  << endl;
+    //cout << queries << " " << mean - bound << " " << mean << " " << mean + bound  << endl;
+    cout << i << " " << mean - bound << " " << mean << " " << mean + bound  << endl;
 
   } // end for 
 
+  delete planner;
+  delete chopper;
+
+  }
   return 0;
 }
