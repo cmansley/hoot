@@ -9,7 +9,8 @@
  */
 SS::SS(Domain *d, Chopper *c, double epsilon) : Planner(d, c, epsilon)
 {
-  
+  /* Store discount factor */
+  gamma = domain->getDiscountFactor();  
 }
 
 /*!
@@ -22,7 +23,7 @@ void SS::setMaxQueries(int queries)
   int N = queries;
   int A = chopper->getNumDiscreteActions();
 
-  C = 1;
+  C = 2;
   H = (int) (log(N*A*C-N+1)/log(A*C) - 1);  
 }
 
@@ -40,8 +41,7 @@ Action SS::plan(State s)
   /* Get action */
   int a = pos-Q.begin();
 
-  Action act(1);
-  act[0] = a;
+  Action act = chopper->continuousAction(a);
 
   return act;
 }
@@ -61,21 +61,19 @@ std::vector<double> SS::estimateQ(int h, State s)
     return Q;
   }
 
-  double gamma = domain->getDiscountFactor();
-
   /* Loop over actions compute Q values */
   SARS *sars = NULL;
-  Action a(1);
+  Action a;
   double sum, sum_rew;
   for(unsigned int i = 0; i < Q.size(); i++) {
 
     sum = 0.0;
     sum_rew = 0.0;
-    a[0] = i;
+    a = chopper->continuousAction(i);
 
     /* Average over C samples*/
     for(int k = 0; k < C; k++) {
-      sars = domain->simulate(s, a); // FIX ME!!!!
+      sars = domain->simulate(s, a);
       sum += estimateV(h - 1, sars->s_prime);
       sum_rew += sars->reward;
       delete sars;
@@ -93,12 +91,12 @@ std::vector<double> SS::estimateQ(int h, State s)
  */
 double SS::estimateV(int h, State s)
 {
-  double min;
+  double max;
 
   /* Compute Q values and find the max */
   std::vector<double> Q = estimateQ(h, s);
-  min = *max_element( Q.begin(), Q.end());
+  max = *max_element( Q.begin(), Q.end());
 
-  return min;
+  return max;
 }
 

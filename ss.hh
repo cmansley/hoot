@@ -39,6 +39,9 @@ private:
   /** Algorithm Parameters */
   int C;
   int H;
+
+  /** Local cache */
+  double gamma;
 };
 
 #endif // SS_HH
