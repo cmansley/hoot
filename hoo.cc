@@ -26,7 +26,7 @@ HOO::HOO(Domain *d, Chopper *c) : domain(d), chopper(c), totalSamples(0)
 
   /* Initialize parameters using advice from paper */
   v1 = sqrt(numDim)/2;
-  rho = 0.5;
+  rho = 1/pow(2,numDim);
 }
 
 HOO::~HOO()
