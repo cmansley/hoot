@@ -10,7 +10,7 @@ const double IP::mp = 2.0; // mass of pendulum in kg
 const double IP::mc = 8.0; // mass of cart in kg
 const double IP::l = 0.5; // length of pendulum in m
 const double IP::dt = 0.1; // 100 ms update
-const double IP::noise = 10.0; // noise from the Lagoudakis paper
+const double IP::noise = 20.0; // noise from the Lagoudakis paper
 
 /*!
  *
@@ -48,7 +48,7 @@ IP::IP(double gamma)
  */
 SARS *IP::step(State s, Action a)
 {
-  SARS *sars = new SARS();
+  SARS *sars = new SARS(stateDimension, actionDimension);
 
   sars->s = s;
   sars->a = a;

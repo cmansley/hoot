@@ -23,6 +23,9 @@ public:
   /** Destructor */
   ~SS() { }
 
+  /** Initialize planner */
+  void initialize() {}
+
   /** Plan for one state */
   Action plan(State s);
   

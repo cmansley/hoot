@@ -2,10 +2,10 @@ CFLAGS=-Wall -g #-pg
 INCLUDES=-I/home/cmansley/boost_1_41_0
 
 plan: main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o gaussian.o hoot.o mcplanner.o chopper.o di.o lqr.o ddi.o
-	g++ $(CFLAGS) -o plan main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o hoot.o mcplanner.o chopper.o di.o lqr.o ddi.o -lgsl -lgslcblas -lm
+	g++ $(CFLAGS) -o plan main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o hoot.o mcplanner.o chopper.o di.o lqr.o ddi.o -lgsl -lgslcblas -lm -lgflags
 
-temp: temp.o gaussian.o hoo.o node.o chopper.o ip.o
-	g++ $(CFLAGS) -o temp temp.o gaussian.o hoo.o node.o ip.o chopper.o -lgsl -lgslcblas -lm
+temp: temp.o gaussian.o hoo.o node.o chopper.o ip.o ddi.o
+	g++ $(CFLAGS) -o temp temp.o gaussian.o hoo.o node.o ip.o chopper.o ddi.o -lgsl -lgslcblas -lm
 
 temp.o: temp.cc
 	g++ -c $(CFLAGS) temp.cc $(INCLUDES)

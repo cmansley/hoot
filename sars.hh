@@ -15,7 +15,7 @@ class SARS
 {
 public:
   /** Constructor */
-  SARS() { s.resize(2); a.resize(1); s_prime.resize(2); }
+  SARS(int sd, int ad) { s.resize(sd); a.resize(ad); s_prime.resize(sd); }
 
   /** Destructor */
   ~SARS() { };

@@ -1,4 +1,5 @@
 /* Implementation dependencies */
+#include <iostream>
 #include "chopper.hh"
 
 /*
@@ -41,7 +42,7 @@ int Chopper::discretizeAction(Action a)
 { 
   int id = 0;
   int temp;
-  for(unsigned int i=0; i<a.size(); i++) {
+  for(int i=a.size()-1; i>=0; i--) {
     id *= actionGrid;
 
     temp = (int) floor(actionGrid / (maxActionRange[i] - minActionRange[i]) * (a[i] - minActionRange[i]));
@@ -54,7 +55,7 @@ int Chopper::discretizeAction(Action a)
     
   }
 
-  return temp;
+  return id;
 }
 
 /*
@@ -96,7 +97,7 @@ Action Chopper::scaleupAction(Action a)
  */
 Action Chopper::continuousAction(int a)
 {
-  Action action;
+  Action action(maxActionRange.size());
 
   /* Convert to tuple of continuous numbers */
   int temp;
@@ -104,13 +105,13 @@ Action Chopper::continuousAction(int a)
   unsigned int i = 0;
   for(i = 0; i < maxActionRange.size()-1; i++) {
     temp = a % actionGrid;
-    u = (maxActionRange[i] - minActionRange[i]) * a / (actionGrid - 1) + minActionRange[i];
-    action.push_back(u);
-    a = (a - temp) / actionGrid;
+    u = (maxActionRange[i] - minActionRange[i]) * temp / (actionGrid - 1) + minActionRange[i];
+    action[i] = u;
+    a = (int) floor((a - temp) / actionGrid);
   }
 
   u = (maxActionRange[i] - minActionRange[i]) * a / (actionGrid - 1) + minActionRange[i];
-  action.push_back(u);
+  action[i] = u;
   
   return action;
 }

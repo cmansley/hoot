@@ -42,7 +42,7 @@ DI::DI(double gamma)
  */
 SARS *DI::step(State s, Action a)
 {
-  SARS *sars = new SARS();
+  SARS *sars = new SARS(stateDimension, actionDimension);
 
   sars->s = s;
   sars->a = a;
