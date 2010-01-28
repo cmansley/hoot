@@ -32,6 +32,9 @@ public:
   /** Restrict planner by queries */
   void setMaxQueries(int queries);
 
+  /** Print data structure */
+  void print(State s) { }
+
 private:
   /** Estimate the Q-value */
   std::vector<double> estimateQ(int h, State s);

@@ -140,7 +140,8 @@ void UCT::print(State s)
       /* Do not include bonus term in greedy operation */
       c = sqrt(2 * log(nsd_temp) / (float) Nsad[sad]);
       /* Store Q-value plus bonus term*/
-      qtemp.push_back(Q[sad] + c);
+      //qtemp.push_back(Q[sad] + c);
+      qtemp.push_back(Q[sad]);
       std::cout<<Nsad[sad]<<",";
     } else {
       qtemp.push_back(vmax);

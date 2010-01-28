@@ -23,6 +23,7 @@ DEFINE_int32(maxaction, 50, "Maximum number of action discretization");
 DEFINE_string(planner, "hoot","Planner to run in a domain");
 DEFINE_string(domain, "ip", "Current domain to run experiments in"); 
 DEFINE_bool(debug, false, "Turn on debugging, which prints state-action");
+DEFINE_bool(print, false, "Print data structure at initial state");
 
 int main(int argc, char* argv[])
 {
@@ -61,65 +62,74 @@ int main(int argc, char* argv[])
     Action a;
     SARS *sars = NULL;
 
-    /* Main experiment loop */
-    for(int queries = FLAGS_minquery; queries <= FLAGS_maxquery; queries*=2) {
+    /* Dump data structure */
+    if(FLAGS_print) {
+      planner->setMaxQueries(64000);
+      a = planner->plan(s);
+      planner->print(s);
+    } else {
 
-      /* Initialize stats */
-      int steps = 0;
-      int n = 0;
-      double epReturn = 0.0;
+      /* Main experiment loop */
+      for(int queries = FLAGS_minquery; queries <= FLAGS_maxquery; queries*=2) {
 
-      double delta = 0.0;
-      double mean = 0.0;
-      double M2 = 0.0;
+	/* Initialize stats */
+	int steps = 0;
+	int n = 0;
+	double epReturn = 0.0;
 
-      /* Set maximum queries planner is allowed */
-      planner->setMaxQueries(queries);
+	double delta = 0.0;
+	double mean = 0.0;
+	double M2 = 0.0;
 
-      // Perform a couple of episodes
-      while(n < 10) {
+	/* Set maximum queries planner is allowed */
+	planner->setMaxQueries(queries);
 
-	/* Plan and execute in world */
-	a = planner->plan(s);
-	delete sars;
-	sars = domain->step(s, a);
+	// Perform a couple of episodes
+	while(n < 10) {
 
-	/* Debugging */
-	if(FLAGS_debug) {
-	  cout << sars->s[0] << " " << sars->s[1] << " " << a[0] << endl;
-	}
+	  /* Plan and execute in world */
+	  a = planner->plan(s);
+	  delete sars;
+	  sars = domain->step(s, a);
+
+	  /* Debugging */
+	  if(FLAGS_debug) {
+	    cout << sars->s[0] << " " << sars->s[1] << " " << a[0] << endl;
+	  }
       
-	/* Update stats */
-	steps += 1;
-	epReturn += sars->reward;
+	  /* Update stats */
+	  steps += 1;
+	  epReturn += sars->reward;
 
-	/* Check for end conditions */
-	if(steps > 200 || sars->terminal) {
-	  /* Compute mean and variance */
-	  n += 1;
-	  delta = epReturn - mean;
-	  mean = mean + delta/n;
-	  M2 = M2 + delta*(epReturn - mean);
+	  /* Check for end conditions */
+	  if(steps > 200 || sars->terminal) {
+	    /* Compute mean and variance */
+	    n += 1;
+	    delta = epReturn - mean;
+	    mean = mean + delta/n;
+	    M2 = M2 + delta*(epReturn - mean);
 
-	  /* Reset stats*/
-	  epReturn = 0.0;
-	  steps = 0;
-	  domain->resetSamples();
-	  s = domain->getInitialState();
+	    /* Reset stats*/
+	    epReturn = 0.0;
+	    steps = 0;
+	    domain->resetSamples();
+	    s = domain->getInitialState();
 
-	} else {
-	  s = sars->s_prime;
-	} // end if
+	  } else {
+	    s = sars->s_prime;
+	  } // end if
 
-      } // end while
+	} // end while
 
-      /* Report */
-      double stdev = sqrt(M2/n);
-      double bound = 1.96 * stdev/sqrt(n);
-      cout << queries << " " << i << " " << mean - bound << " " << mean << " " << mean + bound  << endl;
+	/* Report */
+	double stdev = sqrt(M2/n);
+	double bound = 1.96 * stdev/sqrt(n);
+	cout << queries << " " << i << " " << mean - bound << " " << mean << " " << mean + bound  << endl;
 
-    } // end for 
-
+      } // end for 
+    }
+    
+    /* Clean up */
     delete planner;
     delete chopper;
 

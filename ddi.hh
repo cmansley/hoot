@@ -63,8 +63,8 @@ private:
   std::vector<double> minStateRange;
   std::vector<double> maxActionRange;
   std::vector<double> minActionRange;
-  static const int stateDimension = 6;
-  static const int actionDimension = 3;
+  static const int stateDimension = 2;
+  static const int actionDimension = 1;
   static const double rmin = 0;
   static const double rmax = 1;
 

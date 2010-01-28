@@ -30,6 +30,9 @@ public:
   /** Restrict planner by queries */
   virtual void setMaxQueries(int queries) = 0;
 
+  /** Print data structure */
+  virtual void print(State s) = 0;
+
 protected:
   /** Storage for domain */
   Domain *domain;
