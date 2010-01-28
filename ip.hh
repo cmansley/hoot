@@ -49,6 +49,9 @@ public:
   /** Get number of action dimensions */
   int getActionDimension( ) { return actionDimension; }
 
+  /** Set domain parameters */ /* This is ugly? */
+  void setParam(double d, int i) { noise = d; }
+
   /** Get maximum reward */
   double getRmax( ) { return rmax; }
 
@@ -78,7 +81,7 @@ private:
   static const double mc;
   static const double l;
   static const double dt;
-  static const double noise;
+  double noise;
   double alpha;
 
   double dynamics(State s, double a);

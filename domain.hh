@@ -68,6 +68,9 @@ public:
   /** Get minimum reward */
   virtual double getRmin( ) = 0;
 
+  /** Set domain parameters */ /* This is ugly? */
+  virtual void setParam(double d, int i) = 0;
+
   /** Return number of samples */
   int getNumSamples() { return numSamples; }
 

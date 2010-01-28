@@ -24,6 +24,8 @@ DEFINE_string(planner, "hoot","Planner to run in a domain");
 DEFINE_string(domain, "ip", "Current domain to run experiments in"); 
 DEFINE_bool(debug, false, "Turn on debugging, which prints state-action");
 DEFINE_bool(print, false, "Print data structure at initial state");
+DEFINE_double(noise, 10.0, "Noise parameter");
+DEFINE_int32(dim, 1, "Dimension parameter");
 
 int main(int argc, char* argv[])
 {
@@ -34,8 +36,10 @@ int main(int argc, char* argv[])
   Domain *domain;
   if(FLAGS_domain.find("ip") != string::npos) {
       domain = new IP(0.9);
+      domain->setParam(FLAGS_noise, 0);
   } else if(FLAGS_domain.find("ddi") != string::npos) {
       domain = new DDI(0.9);
+      domain->setParam(0.0, FLAGS_dim);
   }
 
   /* Number of actions */
@@ -85,7 +89,7 @@ int main(int argc, char* argv[])
 	planner->setMaxQueries(queries);
 
 	// Perform a couple of episodes
-	while(n < 10) {
+	while(n < 20) {
 
 	  /* Plan and execute in world */
 	  a = planner->plan(s);
@@ -102,7 +106,7 @@ int main(int argc, char* argv[])
 	  epReturn += sars->reward;
 
 	  /* Check for end conditions */
-	  if(steps > 200 || sars->terminal) {
+	  if(steps > 999 || sars->terminal) {
 	    /* Compute mean and variance */
 	    n += 1;
 	    delta = epReturn - mean;
@@ -124,7 +128,7 @@ int main(int argc, char* argv[])
 	/* Report */
 	double stdev = sqrt(M2/n);
 	double bound = 1.96 * stdev/sqrt(n);
-	cout << queries << " " << i << " " << mean - bound << " " << mean << " " << mean + bound  << endl;
+	cout << queries << " " << i << " " << mean - bound << " " << mean << " " << mean + bound  << " " << FLAGS_noise << " " << FLAGS_dim << endl;
 
       } // end for 
     }
