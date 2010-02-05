@@ -28,6 +28,7 @@ void HOOT::reset()
   /* Clear all HOOs before clearing pointers */
   for(boost::unordered_map<std::vector<int>, HOO*>::const_iterator it = HOOS.begin(); it != HOOS.end(); ++it) {
     it->second->clear();
+    delete it->second;
   }
 
   HOOS.clear();
