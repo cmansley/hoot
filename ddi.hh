@@ -49,7 +49,7 @@ public:
   int getActionDimension( ) { return actionDimension; }
 
   /** Set domain parameters */ /* This is ugly? */
-  void setParam(double d, int i) { actionDimension = i; stateDimension = 2*i; }
+  void setParam(double d, int i);
 
   /** Get maximum reward */
   double getRmax( ) { return rmax; }

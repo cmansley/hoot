@@ -11,7 +11,7 @@ const double DDI::noise = 0.01; // noise
 /*!
  *
  */
-DDI::DDI(double gamma)
+DDI::DDI(double gamma) : stateDimension(2), actionDimension(1)
 {
   /* Initialize our initial state */
   initialState.resize(stateDimension);
@@ -35,6 +35,33 @@ DDI::DDI(double gamma)
 
   /* Initialize gamma */
   this->gamma = gamma;
+}
+
+void DDI::setParam(double d, int i)
+{
+  actionDimension = i; 
+  stateDimension = 2*i; 
+
+  /* Initialize our initial state */
+  initialState.resize(stateDimension);
+  for(int i=0; i<actionDimension; i++) {
+    initialState[i] = 0.0;
+    initialState[i+actionDimension] = 1.0;
+  }
+
+  /* Create max and min action range */
+  maxStateRange.resize(stateDimension);
+  minStateRange.resize(stateDimension);
+
+  std::fill(maxStateRange.begin(), maxStateRange.end(), 2.0);
+  std::fill(minStateRange.begin(), minStateRange.end(), -2.0);
+  
+  maxActionRange.resize(actionDimension);
+  minActionRange.resize(actionDimension);
+
+  std::fill(maxActionRange.begin(), maxActionRange.end(), 2.0);
+  std::fill(minActionRange.begin(), minActionRange.end(), -2.0);
+
 }
 
 /*!

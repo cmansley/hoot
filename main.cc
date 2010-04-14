@@ -29,6 +29,8 @@ DEFINE_int32(dim, 1, "Dimension parameter");
 
 int main(int argc, char* argv[])
 {
+  int iterations;
+  
   /* Init Gflags */
   google::ParseCommandLineFlags(&argc, &argv, true);
 
@@ -37,9 +39,11 @@ int main(int argc, char* argv[])
   if(FLAGS_domain.find("ip") != string::npos) {
       domain = new IP(0.9);
       domain->setParam(FLAGS_noise, 0);
+      iterations = 999;  
   } else if(FLAGS_domain.find("ddi") != string::npos) {
       domain = new DDI(0.9);
       domain->setParam(0.0, FLAGS_dim);
+      iterations = 200;     
   }
 
   /* Number of actions */
@@ -55,7 +59,7 @@ int main(int argc, char* argv[])
     } else if(FLAGS_planner.find("uct") != string::npos) {
       planner = new UCT(domain, chopper, 0.1);
     } else if(FLAGS_planner.find("ss") != string::npos) {
-      planner = new SS(domain, chopper, 0.1);
+      planner = new SS(domain, chopper, 0.1);      
     }
 
     /* Initialize planner */
@@ -106,7 +110,7 @@ int main(int argc, char* argv[])
 	  epReturn += sars->reward;
 
 	  /* Check for end conditions */
-	  if(steps > 999 || sars->terminal) {
+	  if(steps > iterations || sars->terminal) {
 	    /* Compute mean and variance */
 	    n += 1;
 	    delta = epReturn - mean;
