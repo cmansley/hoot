@@ -8,8 +8,8 @@ set output './plot/ddid.eps'
 
 load "../style.gp"
 
-set xrange [0.75:3.25]
-set xtics (1,2,3)
+set xrange [0.75:4.25]
+set xtics (1,2,3,4)
 set term post eps
 
 #set key right bottom
