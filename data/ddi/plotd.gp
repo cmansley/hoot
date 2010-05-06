@@ -1,6 +1,6 @@
 reset
 #set logscale x
-set title 'N-Double Integrator'
+set title 'D-Double Integrator'
 set xlabel 'Number of Action Dimensions'
 set ylabel 'Total Reward'
 
@@ -11,6 +11,7 @@ load "../style.gp"
 set xrange [0.75:4.25]
 set xtics (1,2,3,4)
 set term post eps
+set size 0.6,0.6
 
 #set key right bottom
 

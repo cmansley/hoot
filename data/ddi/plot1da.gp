@@ -1,6 +1,6 @@
 reset
 #set logscale x
-set title 'N-Double Integrator - 1D'
+set title 'D-Double Integrator - 1D'
 set xlabel 'Number of Discrete Actions'
 set ylabel 'Total Reward'
 
@@ -10,6 +10,7 @@ load "../style.gp"
 
 set xrange [0:50]
 set term post eps
+set size 0.6,0.6
 
 set key right bottom
 
