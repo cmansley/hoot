@@ -1,5 +1,6 @@
 /* Implementation dependencies */
 #include <iostream>
+#include <algorithm>
 #include <cmath>
 
 #include "ss.hh"
