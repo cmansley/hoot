@@ -52,8 +52,6 @@ public:
   /** Get number of action dimensions */
   int getActionDimension( ) { return actionDimension; }
 
-  void setParam(double d, int i) {}
-
   /** Get maximum reward */
   double getRmax( ) { return rmax; }
 
@@ -70,7 +68,7 @@ private:
   std::vector<double> maxActionRange;
   std::vector<double> minActionRange;
   static const int stateDimension = 0;
-  static const int actionDimension = 1;
+  static const int actionDimension = 2;
   static const double rmin = 0;
   static const double rmax = 1;
 

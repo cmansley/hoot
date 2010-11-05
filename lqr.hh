@@ -30,6 +30,9 @@ public:
 
   /** Restrict planner by queries */
   void setMaxQueries(int queries) { maxQueries = queries; }
+
+  /** Print data structure */
+  void print(State s) {};
 };
 
 #endif // LQR_HH

@@ -60,6 +60,8 @@ int main(int argc, char* argv[])
       planner = new UCT(domain, chopper, 0.1);
     } else if(FLAGS_planner.find("ss") != string::npos) {
       planner = new SS(domain, chopper, 0.1);      
+    } else if(FLAGS_planner.find("lqr") != string::npos) {
+      planner = new LQR(domain, chopper, 0.1);      
     }
 
     /* Initialize planner */
