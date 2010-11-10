@@ -32,18 +32,27 @@ const double Bicycle::radius_goal=10.0;
 /*!
  *
  */
-Bicycle::Bicycle(double gamma) : stateDimension(11), actionDimension(2)
+Bicycle::Bicycle(double gamma) : stateDimension(5), actionDimension(2)
 {
   /* Initialize our initial state */
   initialState.resize(stateDimension);
-  getStart(initialState);
+  std::fill(maxStateRange.begin(), maxStateRange.end(), 0.0);
 
   /* Create max and min state range */
   maxStateRange.resize(stateDimension);
   minStateRange.resize(stateDimension);
 
-  std::fill(maxStateRange.begin(), maxStateRange.end(), 2.0);
-  std::fill(minStateRange.begin(), minStateRange.end(), -2.0);
+  maxStateRange[0] = mypi;
+  maxStateRange[1] = 5.0;
+  maxStateRange[2] = mypi/15;
+  maxStateRange[3] = 1.0;
+  maxStateRange[4] = 5.0;
+  
+  minStateRange[0] = -mypi;
+  minStateRange[1] = -5.0;
+  minStateRange[2] = -mypi/15;
+  minStateRange[3] = -1.0;
+  minStateRange[4] = -5.0;
   
   /* Create max and min action range */
   maxActionRange.resize(actionDimension);
@@ -88,81 +97,23 @@ SARS *Bicycle::step(State s, Action a)
   return sars;
 }
 
-void Bicycle::getStart(State &nextstate)
-{
-  double theta, theta_dot, theta_d_dot;
-  double omega, omega_dot, omega_d_dot;
-  double xb, yb, xf, yf;
-  double temp;
-  double psi;
-  double psi_goal;
-  double lastdtg;
-
-  theta = theta_dot = theta_d_dot = 0.0;
-  omega = omega_dot = omega_d_dot = 0.0;
-  xb = 0.0; 
-  yb = 0.0;
-  xf = l * cos(mypi/2.0); 
-  yf = l * sin(mypi/2.0);
-    
-  temp = yf - yb;
-  if ((xf == xb) && (temp < 0)) psi = mypi;
-  else {
-    if (temp > 0) psi = atan((xb-xf)/temp);
-    else psi = sign(xb-xf)*(mypi/2) - atan(temp/(xb-xf));
-  }
-  /*
-  //    psi =  atan((xb-xf)/(yf-yb));
-  */
-  
-  psi_goal = orig_calc_angle_to_goal(xf, xb, yf, yb);
-  lastdtg = calc_dist_to_goal(xf, xb, yf, yb);
-  
-  nextstate[0] = theta; 
-  nextstate[1] = theta_dot;
-  nextstate[2] = omega;
-  nextstate[3] = omega_dot;
-  nextstate[4] = omega_d_dot;
-  nextstate[5] = psi_goal;
-  nextstate[6] = lastdtg;
-  nextstate[7] = xb;
-  nextstate[8] = yb;
-  nextstate[9] = xf;
-  nextstate[10] = yf;
-
-  return;
-}
-
 /*!
  *
  */
 void Bicycle::dynamics(State &nextstate, double *reward, double *endsim, State &istate,  Action &action, int to_do, double *maxnoise)
 {
   double omega, omega_dot, omega_d_dot,
-    theta, theta_dot, theta_d_dot, 
-    xf, yf, xb, yb;                   /* tyre position */
+    theta, theta_dot, theta_d_dot;
   double T, d;
   double rCM, rf, rb;
-  double phi,
-    psi,            /* bike's angle to the y-axis */
-    psi_goal;       /* Angle to the goal */
-  double temp;
-  double lastdtg, dtg;
+  double phi;
   double noise;
-  double old_omega;
 
   theta = istate[0];
   theta_dot = istate[1];
   omega = istate[2];
   omega_dot = istate[3];
   omega_d_dot = istate[4];
-  psi_goal = istate[5];
-  lastdtg = istate[6];
-  xb = istate[7];
-  yb = istate[8];
-  xf = istate[9];
-  yf = istate[10];
-  
   
   T = action[0];
   d = action[1];
@@ -178,8 +129,6 @@ void Bicycle::dynamics(State &nextstate, double *reward, double *endsim, State &
   noise = noise*2 - 1;
   d = d + *maxnoise * noise; /* Max noise is 2 cm */
 
-
-  old_omega = omega;
 
   if (theta == 0) {
     rCM = rf = rb = 9999999; /* just a large number */
@@ -208,68 +157,12 @@ void Bicycle::dynamics(State &nextstate, double *reward, double *endsim, State &
 				 80 degrees */
     theta = sign(theta) * 1.3963;
   }
-  
-  /* New position of front tyre */
-  temp = v*dt/(2*rf);                             
-
-  if (temp > 1) 
-    temp = sign(psi + theta) * mypi/2;
-  else 
-    temp = sign(psi + theta) * asin(temp); 
-
-  xf += v * dt * (-sin(psi + theta + temp));
-  yf += v * dt * cos(psi + theta + temp);
-  
-  /* New position of back tyre */
-  temp = v*dt/(2*rb);               
-  if (temp > 1) temp = sign(psi) * mypi/2;
-  else temp = sign(psi) * asin(temp); 
-  xb += v * dt * (-sin(psi + temp));
-  yb += v * dt * (cos(psi + temp));
-  
-  /* Round off errors accumulate so the length of the bike changes over many
-     iterations. The following take care of that: */
-  temp = sqrt((xf-xb)*(xf-xb)+(yf-yb)*(yf-yb));
-
-  /*
-  // Correct back wheel
-  */
-  if (fabs(temp - l) > 0.001) {
-    xb += (xb-xf)*(l-temp)/temp;
-    yb += (yb-yf)*(l-temp)/temp;
-  }
-
-  /*
-  // or, Correct front wheel
-  temp = sqrt((xf-xb)*(xf-xb)+(yf-yb)*(yf-yb));
-  if (fabs(temp - l) > 0.001) {
-  xf += (xf-xb)*(l-temp)/temp;
-  yf += (yf-yb)*(l-temp)/temp;
-  }
-  */
-
-  temp = yf - yb;
-  if ((xf == xb) && (temp < 0)) psi = mypi;
-  else {
-    if (temp > 0) psi = atan((xb-xf)/temp);
-    else psi = sign(xb-xf)*(mypi/2) - atan(temp/(xb-xf));
-  }
-  
-  psi_goal = orig_calc_angle_to_goal(xf, xb, yf, yb);
-  dtg = calc_dist_to_goal(xf, xb, yf, yb);
-  
+    
   nextstate[0] = theta; 
   nextstate[1] = theta_dot;
   nextstate[2] = omega;
   nextstate[3] = omega_dot;
   nextstate[4] = omega_d_dot;
-  nextstate[5] = psi_goal;
-  nextstate[6] = dtg;
-  nextstate[7] = xb;
-  nextstate[8] = yb;
-  nextstate[9] = xf;
-  nextstate[10] = yf;
-
 
   /*-- Calculation of the reward  signal --*/
 
@@ -298,7 +191,6 @@ void Bicycle::dynamics(State &nextstate, double *reward, double *endsim, State &
     /*
     //    *reward += (sign(lastdtg-dtg)*sqr(lastdtg - dtg)) * 0.35;
     */
-    lastdtg = dtg;
   }
 
   return;
@@ -317,76 +209,4 @@ double Bicycle::sign(double x)
   else 
     return -1.0;
 }
-
-/*!
- *
- */
-double Bicycle::calc_dist_to_goal(double xf, double xb, double yf, double yb)
-{
-  double temp;
-
-  // Distance is computed from the front wheel, works best for shaping 
-  temp = sqrt( std::max(0.0, sqr(x_goal-xf)+sqr(y_goal-yf)-sqr(radius_goal) ) ); 
-  return(temp);
-}
-
-/*!
- * Angle from the back wheel 
- */
-double Bicycle::calc_angle_to_goal(double xf, double xb, double yf, double yb)
-{
-  double temp, scalar, perpx, perpy, s, cosine, bikelen;
-
-  temp = (xf-xb)*(x_goal-xb) + (yf-yb)*(y_goal-yb); 
-  bikelen = sqrt( sqr(xf-xb) + sqr(yf-yb) );
-  scalar =  bikelen * sqrt( sqr(x_goal-xb)+sqr(y_goal-yb) );
-
-  perpx = yb - y_goal;
-  perpy = x_goal - xb;
-
-  s = sign( (xf-xb)*perpx + (yf-yb)*perpy );
-
-  cosine = temp/scalar;
-
-  if (cosine > 1.0)
-    cosine = 1.0;
-
-  if (cosine < -1.0)
-    cosine = -1.0;
-
-  if (s > 0)
-    return acos(cosine);
-  else
-    return -acos(cosine);
-}
-
-/*
- * Original Angle Function
- */
-double Bicycle::orig_calc_angle_to_goal(double xf, double xb, double yf, double yb) 
-{ 
-  double temp, scalar, tvaer; 
-
-  temp = (xf-xb)*(x_goal-xf) + (yf-yb)*(y_goal-yf);  
-  scalar =  temp / (l * sqrt(sqr(x_goal-xf)+sqr(y_goal-yf))); 
-  tvaer = (-yf+yb)*(x_goal-xf) + (xf-xb)*(y_goal-yf);  
-
-  if (tvaer <= 0) temp = scalar - 1; 
-  else temp = fabs(scalar - 1); 
-
-  /*
-    These angles are neither in degrees nor radians, but something 
-    strange invented in order to save CPU-time. The measure is arranged the 
-    same way as radians, but with a slightly different negative factor.  
-
-    Say, the goal is to the east. 
-    If the agent rides to the east then  temp = 0 
-    - " -          - " -   north              = -1 
-    - " -                  west               = -2 or 2 
-    - " -                  south              =  1   
-       
-  */
-
-  return(temp); 
-} 
 

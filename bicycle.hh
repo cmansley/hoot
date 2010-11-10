@@ -106,7 +106,6 @@ private:
   double calc_angle_to_goal(double xf, double xb, double yf, double yb);
   double orig_calc_angle_to_goal(double xf, double xb, double yf, double yb);
   void dynamics(State &nextstate, double *reward, double *endsim, State &istate,  Action &action, int to_do, double *maxnoise);
-  void getStart(State &nextstate);
   
   inline double sqr(double x) { return x*x; }
 
