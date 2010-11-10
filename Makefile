@@ -2,8 +2,8 @@ CFLAGS=-Wall -g #-pg
 INCLUDES=-I/home/cmansley/boost_1_41_0 #-I /koko/rl3/cmansley/boost_1_41_0 -I/koko/rl3/cmansley/local/include
 LIBS= #-L/koko/rl3/cmansley/local/lib
 
-plan: main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o gaussian.o hoot.o mcplanner.o chopper.o di.o lqr.o ddi.o
-	g++ $(CFLAGS) -o plan main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o hoot.o mcplanner.o chopper.o di.o lqr.o ddi.o $(LIBS) -lgsl -lgslcblas -lm -lgflags
+plan: main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o gaussian.o hoot.o mcplanner.o chopper.o di.o lqr.o ddi.o bicycle.o
+	g++ $(CFLAGS) -o plan main.o ccl.o ss.o ip.o uct.o lander.o hoo.o node.o hoot.o mcplanner.o chopper.o di.o lqr.o ddi.o bicycle.o $(LIBS) -lgsl -lgslcblas -lm -lgflags
 
 temp: temp.o gaussian.o hoo.o node.o chopper.o ip.o ddi.o
 	g++ $(CFLAGS) -o temp temp.o gaussian.o hoo.o node.o ip.o chopper.o ddi.o -lgsl -lgslcblas -lm
@@ -55,6 +55,9 @@ ddi.o: ddi.cc ddi.hh
 
 lqr.o: lqr.cc lqr.hh
 	g++ -c $(CFLAGS) lqr.cc $(INCLUDES)
+
+bicycle.o: bicycle.cc bicycle.hh
+	g++ -c $(CFLAGS) bicycle.cc $(INCLUDES)
 
 clean:
 	rm -f *~ *.o plan temp
