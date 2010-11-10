@@ -6,7 +6,6 @@
 #include "bicycle.hh"
 
 const double Bicycle::dt = 0.01; // 50 ms update
-const double Bicycle::noise = 0.02; // noise 
 
 const double Bicycle::v=(10.0/3.6);  /* 10 km/h in m/s */
 const double Bicycle::g=9.82;

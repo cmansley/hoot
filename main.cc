@@ -5,6 +5,7 @@
 #include "ip.hh"
 #include "di.hh"
 #include "ddi.hh"
+#include "bicycle.hh"
 
 #include "ss.hh"
 #include "uct.hh"
@@ -44,7 +45,13 @@ int main(int argc, char* argv[])
       domain = new DDI(0.9);
       domain->setParam(0.0, FLAGS_dim);
       iterations = 200;     
+  } else if(FLAGS_domain.find("bicycle") != string::npos) {
+      domain = new Bicycle(0.99);
+      domain->setParam(FLAGS_noise, 0);
+      // iterations = 72000;     
+      iterations = 2000;
   }
+
 
   /* Number of actions */
   for(int i=FLAGS_minaction; i<=FLAGS_maxaction; i+=10) { 

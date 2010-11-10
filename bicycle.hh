@@ -49,7 +49,7 @@ public:
   int getActionDimension( ) { return actionDimension; }
 
   /** Set domain parameters */ /* This is ugly? */
-  void setParam(double d, int i) { }
+  void setParam(double d, int i) { noise = d; }
 
   /** Get maximum reward */
   double getRmax( ) { return rmax; }
@@ -76,7 +76,7 @@ private:
 
   /** Domain Specific */
   static const double dt;
-  static const double noise;
+  double noise;
 
   static const double v;
   static const double g;
