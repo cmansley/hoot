@@ -21,6 +21,7 @@ DEFINE_int32(minquery, 128 , "Minimum number of queries for planning algorithm")
 DEFINE_int32(maxquery, 4096 , "Maximum number of queries for planning algorithm");
 DEFINE_int32(minaction, 5, "Minimum number of action discretization");
 DEFINE_int32(maxaction, 50, "Maximum number of action discretization");
+DEFINE_int32(stepaction, 10, "Step size of action discretization");
 DEFINE_string(planner, "hoot","Planner to run in a domain");
 DEFINE_string(domain, "ip", "Current domain to run experiments in"); 
 DEFINE_bool(debug, false, "Turn on debugging, which prints state-action");
@@ -54,7 +55,7 @@ int main(int argc, char* argv[])
 
 
   /* Number of actions */
-  for(int i=FLAGS_minaction; i<=FLAGS_maxaction; i+=10) { 
+  for(int i=FLAGS_minaction; i<=FLAGS_maxaction; i+=FLAGS_stepaction) { 
 
     /* Create mapper from domain to planner*/
     Chopper *chopper = new Chopper(domain, 20, i);
