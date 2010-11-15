@@ -19,7 +19,22 @@ public:
   Bicycle(double gamma);
 
   /** Destructor */
-  ~Bicycle() { }
+  ~Bicycle() { logfile.close(); }
+
+  /** Simulate an interaction with the environment */
+  SARS *simulate(State s, Action a) 
+  { 
+    /* Simulate step */
+    SARS *sars = step(s,a);
+    
+    /* Track samples */
+    numSamples++; 
+
+    /* Log samples */
+    logfile << *sars << std::endl;
+
+    return sars; 
+  }
 
   /** Perform an interaction with the environment */
   SARS *step(State s, Action a);
@@ -73,6 +88,9 @@ private:
 
   /** Domain Properties */
   double gamma;
+
+  /** Logging */
+  std::ofstream logfile;
 
   /** Domain Specific */
   static const double dt;

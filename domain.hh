@@ -33,7 +33,7 @@ public:
   virtual ~Domain() { }
 
   /** Simulate an interaction with the environment */
-  SARS *simulate(State s, Action a) { numSamples++; return step(s,a); }
+  virtual SARS *simulate(State s, Action a) { numSamples++; return step(s,a); }
 
   /** Perform an interaction with the environment */
   virtual SARS *step(State s, Action a) = 0;

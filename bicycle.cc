@@ -62,6 +62,9 @@ Bicycle::Bicycle(double gamma) : stateDimension(5), actionDimension(2)
 
   /* Initialize gamma */
   this->gamma = gamma;
+
+  /* Open logfile */
+  logfile.open("log.txt");
 }
 
 /*!

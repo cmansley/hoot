@@ -7,6 +7,7 @@
 
 /* Definition dependencies */
 #include <string>
+#include <fstream>
 
 #include "state.hh"
 #include "action.hh"
@@ -35,6 +36,8 @@ public:
   /** Is this a terminal state */
   bool terminal;
 
+  /** Overload output operator */
+  friend std::ostream& operator<<(std::ostream &out, const SARS &sars);
 };
 
 #endif //SARS_HH
