@@ -15,7 +15,7 @@ LQR::LQR(Domain *d, Chopper *c, double epsilon) : Planner(d, c, epsilon)
 /*
  *
  */
-void LQR::initialize()
+void LQR::initialize(std::string filename)
 {
 }
 

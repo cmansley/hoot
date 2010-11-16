@@ -25,7 +25,7 @@ public:
   ~UCT() { }
 
   /** Initialize the planner */
-  void initialize();
+  void initialize(std::string filename);
 
   void print(State s);
 

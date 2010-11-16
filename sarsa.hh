@@ -22,7 +22,7 @@ public:
    ~SARSA( ) { }
 
   /** Initialize the planner */
-  void initialize();
+  void initialize(std::string filename);
 
   /** Query action */
   Action plan(State s);

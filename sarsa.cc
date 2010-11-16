@@ -16,7 +16,7 @@ SARSA::SARSA(Domain *d, Chopper *c, double epsilon) : Planner(d, c, epsilon)
 /*
  *
  */
-void SARSA::initialize()
+void SARSA::initialize(std::string filename)
 {
   /* Locally store gamma */
   gamma = domain->getDiscountFactor();

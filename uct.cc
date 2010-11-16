@@ -15,7 +15,7 @@ UCT::UCT(Domain *d, Chopper *c, double epsilon) : MCPlanner(d, c, epsilon)
 /*
  *
  */
-void UCT::initialize()
+void UCT::initialize(std::string filename)
 {
   /* Locally store values and compute vmax */
   rmax = domain->getRmax();

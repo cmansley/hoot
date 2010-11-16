@@ -22,7 +22,7 @@ public:
   virtual ~Planner( ) { }
 
   /** Initialize planner */
-  virtual void initialize() = 0;
+  virtual void initialize(std::string filename) = 0;
 
   /** Plan for one state */
   virtual Action plan(State s) = 0;

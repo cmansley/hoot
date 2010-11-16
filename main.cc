@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
     }
 
     /* Initialize planner */
-    planner->initialize();
+    planner->initialize("log.txt");
 
     /* Initialize state/action variables */
     State s = domain->getInitialState();

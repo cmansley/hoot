@@ -16,7 +16,7 @@ HOOT::HOOT(Domain *d, Chopper *c, double epsilon) : MCPlanner(d, c, epsilon)
 /*
  *
  */
-void HOOT::initialize()
+void HOOT::initialize(std::string filename)
 {
 }
 

@@ -24,7 +24,7 @@ public:
   ~SS() { }
 
   /** Initialize planner */
-  void initialize() {}
+  void initialize(std::string filename) {}
 
   /** Plan for one state */
   Action plan(State s);
