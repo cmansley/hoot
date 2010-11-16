@@ -6,6 +6,7 @@
 #define SARSA_HH
 
 /* Definition dependencies */
+#include <fstream>
 #include <boost/unordered_map.hpp>
 
 #include "planner.hh"
@@ -23,19 +24,32 @@ public:
   /** Initialize the planner */
   void initialize();
 
-  /** Update SARSA with a SARSA */
-  void updateValue(int depth, SARS *sars, double qvalue);
-
   /** Query action */
   Action plan(State s);
+
+  /** Restrict planner by queries */
+  void setMaxQueries(int queries) { }
+
+  /** Print data structure */
+  void print(State s) { }
 
 protected:
   /** Learning rate */
   double alpha;
-  
+
+  /** Local domain parameters */
+  double gamma;
+  int stateDimension;
+  int actionDimension;
+
   /** Algorithm Data Structures */
   boost::unordered_map<std::vector<int>, double> Q;
 
+  /** Logfile */
+  std::ifstream logfile;
+
+  /** Parse logfile */
+  void parseData(std::string filename);
 };
 
 #endif // SARSA_HH

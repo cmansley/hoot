@@ -1,7 +1,7 @@
 /*
  * Code by Chris Mansley
  */
-#include <iostream>
+#include <fstream>
 #include <iterator>
 #include <cmath>
 
@@ -18,74 +18,77 @@ SARSA::SARSA(Domain *d, Chopper *c, double epsilon) : Planner(d, c, epsilon)
  */
 void SARSA::initialize()
 {
-  /* Locally store values and compute vmax */
-  rmax = domain->getRmax();
-  rmin = domain->getRmin();
+  /* Locally store gamma */
   gamma = domain->getDiscountFactor();
-  vmax = rmax/(1-gamma);
+  stateDimension = domain->getStateDimension();
+  actionDimension = domain->getActionDimension();
 }
 
 /*
  *
  */
-void SARSA::updateValue(int depth, SARS *sars, double qvalue)
+void SARSA::parseData(std::string infile)
 {
-  /* Create vector of ints for state, action and depth */
-  std::vector<int> sd = chopper->discretizeState(sars->s);
-  int da;
-  std::vector<int> sad = sd;
-  sd.push_back(depth);
-  sad.push_back(depth);
-  sad.push_back(0);
+  SARS *sars = new SARS(stateDimension, actionDimension);
+  SARS *nextSARS = new SARS(stateDimension, actionDimension);
+  double q, q_prime;
 
-  /* max Q step */
-  da = chopper->discretizeAction(selectAction(sars->s_prime, 0, false));
-  sad.back() = da;
-  double q_prime;
-  if(Q.find(sad) != Q.end()) {
-    q_prime = Q[sad];
-  } else {
-    /* Uninformative initialization */
-    q_prime = 0;
+  /* Open log file */
+  logfile.open(infile.c_str());
+
+  /* Always grab at least one */
+  logfile >> *sars;
+
+  while(!logfile.eof()) 
+  {
+    /* Parse log file */
+    logfile >> *nextSARS;
+
+    /* Don't process samples straddling a terminal */
+    if(!sars->terminal) {
+
+      /* Grab Q-values for next state and this state */
+      std::vector<int> sa = chopper->discretizeState(nextSARS->s);
+      int a = chopper->discretizeAction(nextSARS->a);
+      sa.push_back(a);
+      q_prime = Q[sa]; /* depends on map initializing to default of 0.0 */
+      
+      sa = chopper->discretizeState(sars->s);
+      a = chopper->discretizeAction(sars->a);
+      sa.push_back(a);
+      q = Q[sa]; /* depends on map initializing to default of 0.0 */
+      
+      /* SARSA rule */
+      Q[sa] = q + alpha*(sars->reward + gamma*q_prime - q);      
+    }
+
+    /* Attempting deep copy may not work */
+    *sars = *nextSARS;
   }
 
-  /* Find Q value */
-  da = chopper->discretizeAction(sars->a);
-  sad.back() = da;
-  double q;
-  if(Q.find(sad) != Q.end()) {
-    q = Q[sad];
-  } else {
-    /* Uninformative initialization */
-    q = 0;
-  }  
-
-  /* SARSA rule */
-  Q[sad] = q + alpha*(sars->reward + gamma*q_prime - q);
+  /* Close log file */
+  logfile.close();
 }
 
 /*
  *
  */
-Action SARSA::selectAction(State s, int depth, bool greedy)
+Action SARSA::plan(State s)
 {
   int k = chopper->getNumDiscreteActions();
 
-  /* Create vector of ints for state, action and depth */
-  std::vector<int> sd = chopper->discretizeState(s);
-  std::vector<int> sad = sd;
-  sd.push_back(depth);
-  sad.push_back(depth);
+  /* Create vector of ints for state and action*/
+  std::vector<int> sad = chopper->discretizeState(s);
   sad.push_back(0); // action slot
 
   /* Grab the Q-value for this state action */
-  int nsd_temp = Nsd[sd];
-  double c;
   std::vector<double> qtemp;
   for(int action=0; action < k; action++) {
+
     sad.back() = action;
+
+    /* Store Q-value */
     if(Q.find(sad) != Q.end()) {
-      /* Store Q-value */
       qtemp.push_back(Q[sad]);
     } else {
       qtemp.push_back(0);
