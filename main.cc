@@ -28,6 +28,7 @@ DEFINE_bool(debug, false, "Turn on debugging, which prints state-action");
 DEFINE_bool(print, false, "Print data structure at initial state");
 DEFINE_double(noise, 10.0, "Noise parameter");
 DEFINE_int32(dim, 1, "Dimension parameter");
+DEFINE_int32(runs, 20, "Number of runs to average over");
 
 int main(int argc, char* argv[])
 {
@@ -103,7 +104,7 @@ int main(int argc, char* argv[])
 	planner->setMaxQueries(queries);
 
 	// Perform a couple of episodes
-	while(n < 20) {
+	while(n < FLAGS_runs) {
 
 	  /* Plan and execute in world */
 	  a = planner->plan(s);
