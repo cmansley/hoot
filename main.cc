@@ -12,6 +12,7 @@
 #include "lander.hh"
 #include "hoot.hh"
 #include "lqr.hh"
+#include "sarsa.hh"
 
 #include "chopper.hh"
 
@@ -71,6 +72,8 @@ int main(int argc, char* argv[])
       planner = new SS(domain, chopper, 0.1);      
     } else if(FLAGS_planner.find("lqr") != string::npos) {
       planner = new LQR(domain, chopper, 0.1);      
+    } else if(FLAGS_planner.find("sarsa") != string::npos) {
+      planner = new SARSA(domain, chopper, 0.1);
     }
 
     /* Initialize planner */
