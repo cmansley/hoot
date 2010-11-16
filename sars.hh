@@ -16,7 +16,7 @@ class SARS
 {
 public:
   /** Constructor */
-  SARS(int sd, int ad) { s.resize(sd); a.resize(ad); s_prime.resize(sd); }
+  SARS(int sd, int ad) { s.resize(sd); a.resize(ad); s_prime.resize(sd); reward = 0.0; terminal = false; }
 
   /** Destructor */
   ~SARS() { };
@@ -38,6 +38,9 @@ public:
 
   /** Overload output operator */
   friend std::ostream& operator<<(std::ostream &out, const SARS &sars);
+
+  /** Overload input operator */
+  friend std::istream& operator>>(std::istream &in, SARS &sars);
 };
 
 #endif //SARS_HH
