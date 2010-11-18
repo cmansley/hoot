@@ -10,7 +10,7 @@
 
 SARSA::SARSA(Domain *d, Chopper *c, double epsilon) : Planner(d, c, epsilon)
 {
-  alpha = 0.1;
+  alpha = 0.9;
 }
 
 /*
@@ -22,6 +22,9 @@ void SARSA::initialize(std::string filename)
   gamma = domain->getDiscountFactor();
   stateDimension = domain->getStateDimension();
   actionDimension = domain->getActionDimension();
+
+  /*Parse log file data */
+  parseData(filename);
 }
 
 /*

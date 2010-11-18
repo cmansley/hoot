@@ -64,7 +64,7 @@ Bicycle::Bicycle(double gamma) : stateDimension(5), actionDimension(2)
   this->gamma = gamma;
 
   /* Open logfile */
-  logfile.open("log.txt");
+  logfile.open("log.txt", std::ios::app);
 }
 
 /*!
