@@ -39,34 +39,39 @@ void SARSA::parseData(std::string infile)
   /* Open log file */
   logfile.open(infile.c_str());
 
-  /* Always grab at least one */
-  logfile >> *sars;
+  for(int i=0; i<100; i++) {
 
-  while(!logfile.eof()) 
-  {
-    /* Parse log file */
-    logfile >> *nextSARS;
+    /* Always grab at least one */
+    logfile >> *sars;
 
-    /* Don't process samples straddling a terminal */
-    if(!sars->terminal) {
+    while(!logfile.eof()) {
+      /* Parse log file */
+      logfile >> *nextSARS;
 
-      /* Grab Q-values for next state and this state */
-      std::vector<int> sa = chopper->discretizeState(nextSARS->s);
-      int a = chopper->discretizeAction(nextSARS->a);
-      sa.push_back(a);
-      q_prime = Q[sa]; /* depends on map initializing to default of 0.0 */
+      /* Don't process samples straddling a terminal */
+      if(!sars->terminal) {
+
+	/* Grab Q-values for next state and this state */
+	std::vector<int> sa = chopper->discretizeState(nextSARS->s);
+	int a = chopper->discretizeAction(nextSARS->a);
+	sa.push_back(a);
+	q_prime = Q[sa]; /* depends on map initializing to default of 0.0 */
       
-      sa = chopper->discretizeState(sars->s);
-      a = chopper->discretizeAction(sars->a);
-      sa.push_back(a);
-      q = Q[sa]; /* depends on map initializing to default of 0.0 */
+	sa = chopper->discretizeState(sars->s);
+	a = chopper->discretizeAction(sars->a);
+	sa.push_back(a);
+	q = Q[sa]; /* depends on map initializing to default of 0.0 */
       
-      /* SARSA rule */
-      Q[sa] = q + alpha*(sars->reward + gamma*q_prime - q);      
+	/* SARSA rule */
+	Q[sa] = q + alpha*(sars->reward + gamma*q_prime - q);      
+      }
+
+      /* Attempting deep copy may not work */
+      *sars = *nextSARS;
     }
 
-    /* Attempting deep copy may not work */
-    *sars = *nextSARS;
+    logfile.clear();
+    logfile.seekg(0);
   }
 
   /* Close log file */
