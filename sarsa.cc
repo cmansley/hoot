@@ -39,7 +39,7 @@ void SARSA::parseData(std::string infile)
   /* Open log file */
   logfile.open(infile.c_str());
 
-  for(int i=0; i<100; i++) {
+  for(int i=0; i<300; i++) {
 
     /* Always grab at least one */
     logfile >> *sars;
